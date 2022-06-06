@@ -1,4 +1,4 @@
-from src.baukran_visualisierer.exceptions.logic_error import LogicError
+from src.baukran_visualisierer.Exceptions.logic_error import LogicError
 
 
 class Baufeld:
