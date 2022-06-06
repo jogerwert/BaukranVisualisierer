@@ -5,19 +5,17 @@ from src.baukran_visualisierer.model.bauteil import Bauteil
 
 class Kran:
 
-    def __init__(self, position_x, position_y, position_z, hoehe, ausladung):
+    def __init__(self, position_x, position_y, hoehe, ausladung):
         self.position_x = position_x
         self.position_y = position_y
-        self.position_z = position_z
         self.hoehe = hoehe
-        self.gesamt_hoehe = self.position_z + self.hoehe
         self.ausladung = ausladung
 
         # Haken ganz oben
-        self.haken_hoehe = self.gesamt_hoehe
+        self.haken_hoehe = hoehe
 
         # Laufkatze direkt am Mast
-        self.laufkatze_entfernung = 1
+        self.laufkatze_position = 1
 
         # Ausleger in Richtung x-Achse
         self.winkel = 0
@@ -33,8 +31,8 @@ class Kran:
             raise RuntimeError("An dem Haken haengt bereits ein Bauteil!")
 
         # TODO: Positionsberechnung testen
-        haken_x = self.laufkatze_entfernung * math.cos(math.radians(self.winkel))
-        haken_y = self.laufkatze_entfernung * math.sin(math.radians(self.winkel))
+        haken_x = self.laufkatze_position * math.cos(math.radians(self.winkel))
+        haken_y = self.laufkatze_position * math.sin(math.radians(self.winkel))
         haken_z = self.haken_hoehe
         haken_anhaengsel = self.baustelle.erhalte_inhalt_koordinate(haken_x, haken_y, haken_z)
 
