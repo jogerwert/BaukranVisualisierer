@@ -1,0 +1,8 @@
+Fragen zu Anweisungen:
+
+    * Wie verhält sich "bringe an Position(x,y,z)"?
+        * Direkter Weg oder effizientester Weg? (Bewegen der Laufkatze während Rotation oder so wenig Bewegung der Laufkatze wie möglich?
+        * Bewegung der Laufkatze während Rotation möglich? (Erst Rotieren, dann Ausrichtung Laufkatze oder Rotieren und Ausrichten gleichzeitig?)
+
+    * Wie verhalten sich Montageanweisungen?
+        * Muss der Kranhaken erst positioniert werden oder wird der Haken automatisch durch Greifen des Bauteils zu dem Bauteil gebracht? (Beispiel Dokumentation -> erst positionieren; Video -> greifen positioniert automatisch)
