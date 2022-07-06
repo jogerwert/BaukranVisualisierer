@@ -57,7 +57,7 @@ class GrafischesBauteil:
                 self.bauteil.pos.z >= eingabe_position_wert_z):
                 break
 
-    def erhalte_bauteil_positionen(self):
+    def erhalte_position(self):
         return self.bauteil.pos
 
 class GrafischesHindernis:
@@ -65,6 +65,13 @@ class GrafischesHindernis:
         bauteil_position = vector(eingabe_position_wert_x, eingabe_position_wert_z, eingabe_position_wert_y)
         box(pos=bauteil_position, color=vector(1, 0, 1), opacity=0.8)
 
+
+class GrafischesPosition:
+    def erzeuge_position(self, eingabe_position_wert_x, eingabe_position_wert_y, eingabe_position_wert_z):
+        self.position = vector(eingabe_position_wert_x, eingabe_position_wert_z, eingabe_position_wert_y)
+
+    def erhalte_position(self):
+        return self.position
 
 class GrafischesKran:
     def erzeuge_kran(self, eingabe_position_wert_x, eingabe_position_wert_y, eingabe_hoehe_kran,
@@ -94,6 +101,21 @@ class GrafischesKran:
             else:
                 break
 
+    def drehe_ausleger_Bauteil(self, eingabe_drehwinkel, bauteil):
+        bereits_gedreht = 0
+        while True:
+            rate(20)
+            if bereits_gedreht < eingabe_drehwinkel:
+                bereits_gedreht += 1
+                self.ausleger.rotate(angle=radians(1), axis=vector(0, 1, 0), origin=self.ausleger.pos)
+                self.laufkatze.rotate(angle=radians(1), axis=vector(0, 1, 0), origin=self.ausleger.pos)
+                self.greifarm.rotate(angle=radians(1), axis=vector(0, 1, 0), origin=self.ausleger.pos)
+                bauteil.x = self.greifarm.pos.x
+                bauteil.y = self.greifarm.pos.y
+                bauteil.z = self.greifarm.pos.z
+            else:
+                break
+
     def debug_drehe_ausleger(self, eingabe_drehwinkel):
             self.ausleger.rotate(angle=radians(eingabe_drehwinkel), axis=vector(0, 1, 0), origin=self.ausleger.pos)
             self.laufkatze.rotate(angle=radians(eingabe_drehwinkel), axis=vector(0, 1, 0), origin=self.ausleger.pos)
@@ -102,9 +124,9 @@ class GrafischesKran:
     def berechne_drehwinkel_zum_objekt(self, eingabe_objekt):
         werte_turm_als_array = numpy.array([self.turm.pos.x, self.turm.pos.z, self.turm.pos.y])
         werte_ausleger_als_array = numpy.array([self.ausleger.axis.x, self.ausleger.axis.z, self.ausleger.axis.y])
-        werte_objekt_als_array = numpy.array([eingabe_objekt.erhalte_bauteil_positionen().x,
-                                              eingabe_objekt.erhalte_bauteil_positionen().z,
-                                              eingabe_objekt.erhalte_bauteil_positionen().y])
+        werte_objekt_als_array = numpy.array([eingabe_objekt.erhalte_position().x,
+                                              eingabe_objekt.erhalte_position().z,
+                                              eingabe_objekt.erhalte_position().y])
         abstand_ausleger_zu_objekt = numpy.linalg.norm(werte_ausleger_als_array - werte_objekt_als_array)
         abstand_ausleger_zu_turm = numpy.linalg.norm(werte_ausleger_als_array - werte_turm_als_array)
         abstand_turm_zu_objekt = numpy.linalg.norm(werte_turm_als_array - werte_objekt_als_array)
@@ -144,6 +166,7 @@ class GrafischesKran:
             if x_zahler >= abstand and y_zahler >=abstand:
                 break
 
+
     def debug_bewege_laufkatze(self, eingabe_position_wert_x, eingabe_position_wert_y):
         x_zahler = y_zahler = 0
         x_abstand_erreicht = y_abstand_erreicht = False
@@ -178,6 +201,44 @@ class GrafischesKran:
             if x_abstand_erreicht == True and y_abstand_erreicht == True:
                 break
 
+    def debug_bewege_laufkatze_bauteil(self, eingabe_position_wert_x, eingabe_position_wert_y, bauteil):
+        x_zahler = y_zahler = 0
+        x_abstand_erreicht = y_abstand_erreicht = False
+        x_abstand_zwischen_zwei_puntken = eingabe_position_wert_x - self.laufkatze.pos.x
+        y_abstand_zwischen_zwei_puntken = eingabe_position_wert_y - self.laufkatze.pos.z
+        while True:
+            rate(20)
+            if x_abstand_zwischen_zwei_puntken > 0 and x_abstand_erreicht == False:
+                self.laufkatze.pos.x += 0.1
+                self.greifarm.pos.x += 0.1
+                bauteil.x = self.greifarm.pos.x
+                x_zahler += 0.1
+                if x_zahler >= x_abstand_zwischen_zwei_puntken:
+                    x_abstand_erreicht = True
+            elif x_abstand_erreicht == False:
+                self.laufkatze.pos.x -= 0.1
+                self.greifarm.pos.x -= 0.1
+                bauteil.x = self.greifarm.pos.x
+                x_zahler -= 0.1
+                if x_zahler < x_abstand_zwischen_zwei_puntken:
+                    x_abstand_erreicht = True
+            if y_abstand_zwischen_zwei_puntken > 0 and y_abstand_erreicht == False:
+                self.laufkatze.pos.z += 0.1
+                self.greifarm.pos.z += 0.1
+                bauteil.z = self.greifarm.pos.z
+                y_zahler += 0.1
+                if y_zahler >= y_abstand_zwischen_zwei_puntken:
+                    y_abstand_erreicht = True
+            elif y_abstand_erreicht == False:
+                self.laufkatze.pos.z -= 0.1
+                self.greifarm.pos.z -= 0.1
+                bauteil.z = self.greifarm.pos.z
+                y_zahler -= 0.1
+                if y_zahler < y_abstand_zwischen_zwei_puntken:
+                    y_abstand_erreicht = True
+            if x_abstand_erreicht == True and y_abstand_erreicht == True:
+                break
+
     def senke_greifarm(self, eingabe_senke):
         while True:
             rate(20)
@@ -194,6 +255,8 @@ class GrafischesKran:
             else:
                 break
 
+    def erhalte_posistion_laufkatze(self):
+        return self.laufkatze.pos
 
 def test_baufeld():
     baufeld = GrafischesBaufeld()
@@ -235,10 +298,50 @@ def test_kran():
     #kran.erhoehe_greifarm(4)
     #bauteil3.erhoehe_bauteil(4)
 
+def ausfuehrung_beispiel():
+    beispiel_baufeld = GrafischesBaufeld()
+    beispiel_baufeld.erzeuge_baufeld(10, 5)
+
+    beispiel_hindernis = []
+    beispiel_hindernis.append(GrafischesHindernis())
+    beispiel_hindernis.append(GrafischesHindernis())
+    beispiel_hindernis[0].erzeuge_hindernis(3, 2, 0)
+    beispiel_hindernis[1].erzeuge_hindernis(3, 2, 1)
+
+    beispiel_bauteile = []
+    beispiel_bauteile.append(GrafischesBauteil())
+    beispiel_bauteile.append(GrafischesBauteil())
+    beispiel_bauteile.append(GrafischesBauteil())
+    beispiel_bauteile[0].erzeuge_bauteil(0, 2, 0)
+    beispiel_bauteile[1].erzeuge_bauteil(1, 2, 0)
+    beispiel_bauteile[2].erzeuge_bauteil(2, 2, 0)
+
+    beispiel_kran = GrafischesKran()
+    beispiel_kran.erzeuge_kran(0, 0, 5, 10)
+
+    winkel = beispiel_kran.berechne_drehwinkel_zum_objekt(beispiel_bauteile[1])
+    beispiel_kran.drehe_ausleger(winkel)
+    beispiel_kran.debug_bewege_laufkatze(beispiel_bauteile[1].erhalte_position().x,
+                                              beispiel_bauteile[1].erhalte_position().z)
+    beispiel_kran.senke_greifarm(1)
+    x = threading.Thread(target=beispiel_kran.erhoehe_greifarm, args=(2,))
+    y = threading.Thread(target=beispiel_bauteile[1].erhoehe_bauteil, args=(2,))
+    x.start()
+    y.start()
+    sleep(3)
+    placeholder_position = GrafischesPosition()
+    placeholder_position.erzeuge_position(6, 2, 2)
+    winkel = beispiel_kran.berechne_drehwinkel_zum_objekt(placeholder_position)
+    beispiel_kran.drehe_ausleger_Bauteil(winkel, beispiel_bauteile[1].erhalte_position())
+    beispiel_kran.debug_bewege_laufkatze_bauteil(placeholder_position.erhalte_position().x, placeholder_position.erhalte_position().z,
+                                                 beispiel_bauteile[1].erhalte_position())
+
 
 scene.background = color.white
-test_baufeld()
-test_bauteil()
-test_hindernis()
-test_kran()
+sleep(3)
+ausfuehrung_beispiel()
+#test_baufeld()
+#test_bauteil()
+#test_hindernis()
+#test_kran()
 
