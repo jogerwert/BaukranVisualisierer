@@ -58,11 +58,6 @@ class Baustelle:
         baustellen_objekt = self.baufeld.entferne_baustellenobjekt(x, y, z)
         return baustellen_objekt
 
-    def bewege_baustellenobjekt(self, x1, y1, z1, x2, y2, z2):
-        # TODO: Testen
-        # TODO: Pruefe ob Listen aktualisiert
-        return self.baufeld.bewege_baustellenobjekt(x1, y1, z1, x2, y2, z2)
-
     def pruefe_koordinate_leer(self, x, y, z):
         # TODO: Testen
 

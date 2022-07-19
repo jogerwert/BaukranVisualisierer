@@ -60,7 +60,6 @@ class Kran:
 
         if self.haken_bauteil is None:
             raise LogicError("An dem Haken haengt kein Bauteil!")
-        pass
 
     def lasse_los(self):
         # TODO: Testen

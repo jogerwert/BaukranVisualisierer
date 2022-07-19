@@ -46,21 +46,3 @@ class Baufeld:
             return self.inhalt.pop((x, y, z))
 
         return None
-
-    def bewege_baustellenobjekt(self, x1, y1, z1, x2, y2, z2):
-        # TODO: Testen
-
-        if self.erhalte_baustellenobjekt(x1, y1, z1) is None:
-            raise LogicError(f'An der Koordinate ({x1}, {y1}, {z1}) existiert kein Gegenstand!')
-
-        baustellen_objekt = self.erhalte_baustellenobjekt(x1, y1, z1)
-
-        baustellen_objekt.position_x = x2
-        baustellen_objekt.position_y = y2
-        baustellen_objekt.position_z = z2
-
-        self.entferne_baustellenobjekt(x1, y1, z1)
-
-        self.platziere_baustellenobjekt(baustellen_objekt)
-
-        return baustellen_objekt
