@@ -91,11 +91,14 @@ class Kran:
 
         return bauteil
 
-    def bringe_an(self, x, y, z):
+    def bringe_an(self, x, y, z=None):
         # TODO: Testen
 
         if x == self.position_x and y == self.position_y:
             raise LogicError(f'Bauteile koennen nicht auf der Position des Krans platziert werden!')
+
+        if z is None:
+            z = math.floor(self.haken_hoehe)
 
         if z > self.hoehe:
             raise LogicError(f'Die Hoehe des Krans wurde ueberschritten!')
