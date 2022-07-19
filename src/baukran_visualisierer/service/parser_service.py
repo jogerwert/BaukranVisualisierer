@@ -1,28 +1,63 @@
+from src.baukran_visualisierer.model.anweisungen.bewegunsanweisung import Bewegungsanweisung
+from src.baukran_visualisierer.model.anweisungen.hakenhandlung import Hakenhandlung
+from src.baukran_visualisierer.model.anweisungen.montageanweisung import Montageanweisung
 from src.baukran_visualisierer.model.baufeld import Baufeld
 from src.baukran_visualisierer.model.baustelle import Baustelle
 from src.baukran_visualisierer.model.bauteil import Bauteil
 from src.baukran_visualisierer.model.gegenstand import Gegenstand
 from src.baukran_visualisierer.model.kran import Kran
 
-import src.baukran_visualisierer.parameter.variablen_beispiel as var
-
 
 def erstelle_beispiel_baustelle():
-    name = var.baustelle_name
-    baufeld = Baufeld(var.baufeld_tupel[0], var.baufeld_tupel[1])
-    kran = Kran(var.kran_tupel[0], var.kran_tupel[1], var.kran_tupel[2], var.kran_tupel[3], var.kran_tupel[4])
+    name = "HTWSaar"
+    # (laenge, breite)
+    baufeld = Baufeld(10, 5)
+    # (x, y, hoehe, ausladung)
+    kran = Kran(0, 0, 5, 10)
 
-    gegenstaende = [Gegenstand(var.gegenstand_1_tupel[0], var.gegenstand_1_tupel[1], var.gegenstand_1_tupel[2]),
-                    Gegenstand(var.gegenstand_2_tupel[0], var.gegenstand_2_tupel[1], var.gegenstand_2_tupel[2])]
+    # (x, y, z)
+    gegenstaende = [Gegenstand(3, 2, 0),
+                    Gegenstand(3, 2, 1)]
 
-    bauteile = [Bauteil(var.bauteil_1_tupel[0], var.bauteil_1_tupel[1], var.bauteil_1_tupel[2], var.bauteil_1_tupel[3]),
-                Bauteil(var.bauteil_2_tupel[0], var.bauteil_2_tupel[1], var.bauteil_2_tupel[2], var.bauteil_2_tupel[3]),
-                Bauteil(var.bauteil_3_tupel[0], var.bauteil_3_tupel[1], var.bauteil_3_tupel[2], var.bauteil_3_tupel[3]),
-                Bauteil(var.bauteil_4_tupel[0], var.bauteil_4_tupel[1], var.bauteil_4_tupel[2], var.bauteil_4_tupel[3]),
-                Bauteil(var.bauteil_5_tupel[0], var.bauteil_5_tupel[1], var.bauteil_5_tupel[2], var.bauteil_5_tupel[3]),
-                Bauteil(var.bauteil_6_tupel[0], var.bauteil_6_tupel[1], var.bauteil_6_tupel[2], var.bauteil_6_tupel[3])]
+    # (x, y, z)
+    bauteile = [Bauteil("BasisLinks", 0, 2, 0),
+                Bauteil("BasisRechts", 1, 2, 0),
+                Bauteil("Dach", 2, 2, 0)]
 
-    montageanweisungen = []
+    krananweisungen_basis_rechts = [
+        Bewegungsanweisung(kran.bringe_an, (1, 2, 0)),
+        Hakenhandlung(kran.greife),
+        Bewegungsanweisung(kran.hebe_um, 2),
+        Bewegungsanweisung(kran.bringe_an, (6, 2, 2)),
+        Bewegungsanweisung(kran.senke_um, 2),
+        Hakenhandlung(kran.richte_aus),
+        Hakenhandlung(kran.lasse_los)
+    ]
+    krananweisungen_basis_links = [
+        Bewegungsanweisung(kran.hebe_um, 2),
+        Bewegungsanweisung(kran.bringe_an, (0, 2, 2)),
+        Bewegungsanweisung(kran.senke_um, 2),
+        Hakenhandlung(kran.greife),
+        Bewegungsanweisung(kran.hebe_um, 2),
+        Bewegungsanweisung(kran.bringe_an, (5, 2, 2)),
+        Bewegungsanweisung(kran.senke_um, 2),
+        Hakenhandlung(kran.richte_aus),
+        Hakenhandlung(kran.lasse_los)
+    ]
+    krananweisungen_dach = [
+        Bewegungsanweisung(kran.hebe_um, 2),
+        Bewegungsanweisung(kran.bringe_an, (2, 2, 2)),
+        Bewegungsanweisung(kran.senke_um, 2),
+        Hakenhandlung(kran.greife),
+        Bewegungsanweisung(kran.hebe_um, 2),
+        Bewegungsanweisung(kran.bringe_an, (6, 2, 2)),
+        Bewegungsanweisung(kran.senke_um, 1),
+        Hakenhandlung(kran.richte_aus),
+        Hakenhandlung(kran.lasse_los)
+    ]
+    montageanweisungen = [Montageanweisung(bauteile[1], kran, krananweisungen_basis_rechts),
+                          Montageanweisung(bauteile[0], kran, krananweisungen_basis_links),
+                          Montageanweisung(bauteile[2], kran, krananweisungen_dach)]
 
     baustelle = Baustelle(name, baufeld, kran, gegenstaende, bauteile, montageanweisungen)
 
