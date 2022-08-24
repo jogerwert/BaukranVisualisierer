@@ -1,6 +1,6 @@
 import math
 
-from src.baukran_visualisierer.exceptions.logic_error import LogicError
+from src.baukran_visualisierer.exceptions.bas_logic_error import BasLogicError
 from src.baukran_visualisierer.model.bauteil import Bauteil
 
 
@@ -32,10 +32,10 @@ class Kran:
         # TODO: Testen
 
         if self.baustelle is None:
-            raise LogicError("Kran wurde keiner Baustelle zugewiesen!")
+            raise BasLogicError("Kran wurde keiner Baustelle zugewiesen!")
 
         if self.haken_bauteil is not None:
-            raise LogicError("An dem Haken haengt bereits ein Bauteil!")
+            raise BasLogicError("An dem Haken haengt bereits ein Bauteil!")
 
         haken_koordinaten_tuple = self.berechne_koordinaten_aus_kranposition(
             self.laufkatze_entfernung, self.winkel, self.haken_hoehe)
@@ -50,25 +50,25 @@ class Kran:
             self.haken_bauteil = haken_bauteil
             self.baustelle.entferne_baustellenobjekt(haken_x, haken_y, haken_z)
         else:
-            raise LogicError(f'An der Koordinate ({haken_x}, {haken_y}, {haken_z}) befindet sich kein Bauteil!')
+            raise BasLogicError(f'An der Koordinate ({haken_x}, {haken_y}, {haken_z}) befindet sich kein Bauteil!')
 
     def richte_aus(self):
         # TODO: Testen
 
         if self.baustelle is None:
-            raise LogicError("Kran wurde keiner Baustelle zugewiesen!")
+            raise BasLogicError("Kran wurde keiner Baustelle zugewiesen!")
 
         if self.haken_bauteil is None:
-            raise LogicError("An dem Haken haengt kein Bauteil!")
+            raise BasLogicError("An dem Haken haengt kein Bauteil!")
 
     def lasse_los(self):
         # TODO: Testen
 
         if self.baustelle is None:
-            raise LogicError("Kran wurde keiner Baustelle zugewiesen!")
+            raise BasLogicError("Kran wurde keiner Baustelle zugewiesen!")
 
         if self.haken_bauteil is None:
-            raise LogicError("An dem Haken haengt kein Bauteil!")
+            raise BasLogicError("An dem Haken haengt kein Bauteil!")
 
         haken_koordinaten_tuple = self.berechne_koordinaten_aus_kranposition(
             self.laufkatze_entfernung, self.winkel, self.haken_hoehe)
@@ -78,7 +78,7 @@ class Kran:
         haken_z = haken_koordinaten_tuple[2]
 
         if not self.baustelle.pruefe_koordinate_leer(haken_x, haken_y, haken_z):
-            raise LogicError(f'An der Koordinate ({haken_x}, {haken_y}, {haken_z}) existiert bereits ein Bauteil')
+            raise BasLogicError(f'An der Koordinate ({haken_x}, {haken_y}, {haken_z}) existiert bereits ein Bauteil')
 
         bauteil = self.haken_bauteil
 
@@ -91,17 +91,20 @@ class Kran:
 
         return bauteil
 
-    def bringe_an(self, x, y, z):
+    def bringe_an(self, x, y, z=None):
         # TODO: Testen
 
         if x == self.position_x and y == self.position_y:
-            raise LogicError(f'Bauteile koennen nicht auf der Position des Krans platziert werden!')
+            raise BasLogicError(f'Bauteile koennen nicht auf der Position des Krans platziert werden!')
+
+        if z is None:
+            z = math.floor(self.haken_hoehe)
 
         if z > self.hoehe:
-            raise LogicError(f'Die Hoehe des Krans wurde ueberschritten!')
+            raise BasLogicError(f'Die Hoehe des Krans wurde ueberschritten!')
 
         if x < 0 or x >= self.baustelle.baufeld.laenge_x or y < 0 or y >= self.baustelle.baufeld.breite_y:
-            raise LogicError(f'Der Haken wurde ausserhalb des Baufelds bewegt!')
+            raise BasLogicError(f'Der Haken wurde ausserhalb des Baufelds bewegt!')
 
         hakenposition_tuple = self.berechne_hakenposition_aus_koordinaten(x, y, z)
         laufkatze_entfernung = hakenposition_tuple[0]
@@ -109,7 +112,7 @@ class Kran:
         haken_hoehe = hakenposition_tuple[2]
 
         if laufkatze_entfernung > self.ausladung:
-            raise LogicError(f'Die maximale Reichweite der Laufkatze wurde ueberschritten!')
+            raise BasLogicError(f'Die maximale Reichweite der Laufkatze wurde ueberschritten!')
 
         self.laufkatze_entfernung = laufkatze_entfernung
         self.winkel = winkel
@@ -121,10 +124,10 @@ class Kran:
         # TODO: Testen
 
         if hoehe <= 0:
-            raise LogicError(f'Hoehe muss positiv sein!')
+            raise BasLogicError(f'Hoehe muss positiv sein!')
 
         if (self.haken_hoehe - hoehe) < 0:
-            raise LogicError(f'Ein Bauteil wurde unter das Baufeld bewegt!')
+            raise BasLogicError(f'Ein Bauteil wurde unter das Baufeld bewegt!')
 
         self.haken_hoehe = self.haken_hoehe - hoehe
 
@@ -134,10 +137,10 @@ class Kran:
         # TODO: Testen
 
         if hoehe <= 0:
-            raise LogicError(f'Hoehe muss positiv sein!')
+            raise BasLogicError(f'Hoehe muss positiv sein!')
 
         if (self.haken_hoehe + hoehe) > self.hoehe:
-            raise LogicError(f'Die Hoehe des Hakens darf die Hoehe des Krans nicht ueberschreiten!')
+            raise BasLogicError(f'Die Hoehe des Hakens darf die Hoehe des Krans nicht ueberschreiten!')
 
         self.haken_hoehe = self.haken_hoehe + hoehe
 
@@ -172,7 +175,7 @@ class Kran:
         )
 
         if laufkatze_entfernung > self.ausladung:
-            raise LogicError(f'Das Bauteil an Position ({haken_x}, {haken_y}, {haken_z}) '
+            raise BasLogicError(f'Das Bauteil an Position ({haken_x}, {haken_y}, {haken_z}) '
                              f'liegt ausserhalb der Reichweite des Krans!')
 
         # Berechnung: Winkel im Dreieck aus Hypotenuse und Ankathete

@@ -1,4 +1,4 @@
-from src.baukran_visualisierer.exceptions.logic_error import LogicError
+from src.baukran_visualisierer.exceptions.bas_logic_error import BasLogicError
 
 
 class Bewegungsanweisung:
@@ -20,5 +20,5 @@ class Bewegungsanweisung:
             return
 
         # Fehler, falls irgendwas durch die Bedingungen rutscht
-        raise LogicError(f'Ein undefiniertes Verhalten wurde bei einer Bewegungsanweisung festgestellt! '
-                         f'Bitte kontaktieren Sie einen Verantwortlichen.')
+        raise BasLogicError(f'Ein undefiniertes Verhalten wurde bei einer Bewegungsanweisung festgestellt! '
+                            f'Bitte kontaktieren Sie einen Verantwortlichen.')
