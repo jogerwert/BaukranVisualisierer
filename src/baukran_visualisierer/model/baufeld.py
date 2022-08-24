@@ -1,4 +1,4 @@
-from src.baukran_visualisierer.exceptions.logic_error import LogicError
+from src.baukran_visualisierer.exceptions.bas_logic_error import BasLogicError
 
 
 class Baufeld:
@@ -19,13 +19,13 @@ class Baufeld:
         z = baustellen_objekt.position_z
 
         if x < 0 or x >= self.laenge_x or y < 0 or y >= self.breite_y:
-            raise LogicError(f'Ein Gegenstand wurde ausserhalb des Baufelds platziert!')
+            raise BasLogicError(f'Ein Gegenstand wurde ausserhalb des Baufelds platziert!')
 
         if (x, y, z) in self.inhalt:
-            raise LogicError(f'An der Koordinate ({x}, {y}, {z}) existiert bereits ein Gegenstand!')
+            raise BasLogicError(f'An der Koordinate ({x}, {y}, {z}) existiert bereits ein Gegenstand!')
 
         if baustellen_objekt is None:
-            raise LogicError(f'Das zu platzierende Objekt besitzt keinen Inhalt!')
+            raise BasLogicError(f'Das zu platzierende Objekt besitzt keinen Inhalt!')
 
         self.inhalt[x, y, z] = baustellen_objekt
 
@@ -33,7 +33,7 @@ class Baufeld:
         # TODO: Testen
 
         if x < 0 or x >= self.laenge_x or y < 0 or y >= self.breite_y:
-            raise LogicError(f'Die Koordinate ({x}, {y}, {z}) liegt ausserhalb des Baufelds!')
+            raise BasLogicError(f'Die Koordinate ({x}, {y}, {z}) liegt ausserhalb des Baufelds!')
         if (x, y, z) in self.inhalt:
             return self.inhalt[x, y, z]
 

@@ -7,6 +7,12 @@ from src.baukran_visualisierer.model.bauteil import Bauteil
 from src.baukran_visualisierer.model.gegenstand import Gegenstand
 from src.baukran_visualisierer.model.kran import Kran
 
+from src.baukran_visualisierer.parser import parser
+
+
+def parse_baustelle(eingabedatei):
+    return parse_baustelle(eingabedatei)
+
 
 def erstelle_beispiel_baustelle():
     name = "HTWSaar"
