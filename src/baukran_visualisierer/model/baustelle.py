@@ -3,47 +3,65 @@ import weakref
 
 class Baustelle:
 
-    def __init__(self, name, baufeld, gegenstaende, kraene, bauteile, montageanweisungen):
+    def __init__(self, name, baufeld, kran, gegenstaende, bauteile, montageanweisungen):
         self.name = name
         self.baufeld = baufeld
-        self.gegenstaende = gegenstaende
-        self.kraene = kraene
-        self.bauteile = bauteile
-        self.montageanweisungen = montageanweisungen
 
-        for kran in kraene:
-            kran.baustelle = weakref.ref(self)
+        self.kran = kran
+        baufeld.platziere_baustellenobjekt(kran)
+        kran.baustelle = weakref.proxy(self)
+
+        self.gegenstaende = gegenstaende
+        for gegenstand in gegenstaende:
+            baufeld.platziere_baustellenobjekt(gegenstand)
+
+        self.bauteile = bauteile
+        for bauteil in bauteile:
+            baufeld.platziere_baustellenobjekt(bauteil)
+
+        self.montageanweisungen = montageanweisungen
+        self.montageanweisungs_zaehler = 0
 
     def alle_montageanweisungen_ausfuehren(self):
-        pass
 
-    def eine_montageanweisung_ausfuehren(self):
-        pass
+        if self.montageanweisungs_zaehler < len(self.montageanweisungen):
 
-    def ursprungszustand_wiederherstellen(self):
-        pass
+            # Bereits durchgefuehrte Anweisungen werden nicht wiederholt
+            montageanweisungen = self.montageanweisungen[self.montageanweisungs_zaehler:]
 
-    def erhalte_inhalt_koordinate(self, x, y, z):
-        # TODO: pruefe ob out-of-bounds
+            for anweisung in montageanweisungen:
+                anweisung.alle_krananweisungen_ausfuehren()
+                self.montageanweisungs_zaehler += 1
 
-        for kran in self.kraene:
-            if kran.position_x == x and kran.position_y == y:
-                return kran
+    def naechste_montageanweisung_ausfuehren(self):
+        if self.montageanweisungs_zaehler < len(self.montageanweisungen):
+            self.montageanweisungen[self.montageanweisungs_zaehler].alle_krananweisungen_ausfuehren()
+            self.montageanweisungs_zaehler += 1
 
-        for gegenstand in self.gegenstaende:
-            if gegenstand.position_x == x and gegenstand.position_y == y and gegenstand.position_z == z:
-                return gegenstand
+    def naechste_krananweisung_ausfuehren(self):
+        if self.montageanweisungs_zaehler < len(self.montageanweisungen):
+            anweisung = self.montageanweisungen[self.montageanweisungs_zaehler]
+            anweisung.naechste_krananweisung_ausfuehren()
+            if anweisung.pruefe_alle_anweisungen_ausgefuehrt():
+                self.montageanweisungs_zaehler += 1
 
-        for bauteil in self.bauteile:
-            if bauteil.position_x == x and bauteil.position_y == y and bauteil.position_z == z:
-                return bauteil
+    def platziere_baustellenobjekt(self, baustellenobjekt):
+        # TODO: Testen
+        self.baufeld.platziere_baustellenobjekt(baustellenobjekt)
 
-        return None
+    def erhalte_baustellenobjekt(self, x, y, z):
+        # TODO: Testen
+        return self.baufeld.erhalte_baustellenobjekt(x, y, z)
+
+    def entferne_baustellenobjekt(self, x, y, z):
+        # TODO: Testen
+        baustellen_objekt = self.baufeld.entferne_baustellenobjekt(x, y, z)
+        return baustellen_objekt
 
     def pruefe_koordinate_leer(self, x, y, z):
-        # TODO: pruefe ob out-of-bounds
+        # TODO: Testen
 
-        if self.erhalte_inhalt_koordinate(x, y, z) is None:
+        if self.baufeld.erhalte_baustellenobjekt(x, y, z) is None:
             return True
         else:
             return False
