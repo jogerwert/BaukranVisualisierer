@@ -2,6 +2,7 @@ import getopt
 import sys
 
 from src.baukran_visualisierer.parser import parser
+from src.baukran_visualisierer.service import visualisierungs_service
 
 
 def parse_baustelle(dateipfad):
@@ -11,6 +12,11 @@ def parse_baustelle(dateipfad):
 
 def start_cmd(eingabedatei):
     baustelle = parse_baustelle(eingabedatei)
+
+
+def start_visualisierung(eingabedatei):
+    baustelle = parse_baustelle(eingabedatei)
+    visualisierungs_service.visualisiere_baustelle(baustelle)
 
 
 def main(argv):
@@ -36,7 +42,7 @@ def main(argv):
                 print(f'Unbekannte Option "{opt}" wurde gefunden.')
                 sys.exit(2)
 
-    start_cmd(eingabedatei)
+    start_visualisierung(eingabedatei)
 
 
 if __name__ == '__main__':

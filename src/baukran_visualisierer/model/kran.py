@@ -2,6 +2,7 @@ import math
 
 from src.baukran_visualisierer.exceptions.bas_logic_error import BasLogicError
 from src.baukran_visualisierer.model.bauteil import Bauteil
+from src.baukran_visualisierer.service import visualisierungs_service
 
 
 class Kran:
@@ -106,17 +107,25 @@ class Kran:
         if x < 0 or x >= self.baustelle.baufeld.laenge_x or y < 0 or y >= self.baustelle.baufeld.breite_y:
             raise BasLogicError(f'Der Haken wurde ausserhalb des Baufelds bewegt!')
 
+        winkel_vorher = self.winkel
+
         hakenposition_tuple = self.berechne_hakenposition_aus_koordinaten(x, y, z)
         laufkatze_entfernung = hakenposition_tuple[0]
-        winkel = hakenposition_tuple[1]
+        winkel_nachher = hakenposition_tuple[1]
         haken_hoehe = hakenposition_tuple[2]
 
         if laufkatze_entfernung > self.ausladung:
             raise BasLogicError(f'Die maximale Reichweite der Laufkatze wurde ueberschritten!')
 
         self.laufkatze_entfernung = laufkatze_entfernung
-        self.winkel = winkel
+        self.winkel = winkel_nachher
         self.haken_hoehe = haken_hoehe
+
+        bauteil_name = None
+        if self.haken_bauteil is not None:
+            bauteil_name = self.haken_bauteil.name
+
+        visualisierungs_service.visualisiere_bringe_an(winkel_vorher, winkel_nachher, x, y, z, bauteil_name)
 
         return self.laufkatze_entfernung, self.winkel, self.haken_hoehe
 
@@ -131,6 +140,8 @@ class Kran:
 
         self.haken_hoehe = self.haken_hoehe - hoehe
 
+        visualisierungs_service.visualisiere_senke_um(hoehe)
+
         return self.haken_hoehe
 
     def hebe_um(self, hoehe):
@@ -143,6 +154,8 @@ class Kran:
             raise BasLogicError(f'Die Hoehe des Hakens darf die Hoehe des Krans nicht ueberschreiten!')
 
         self.haken_hoehe = self.haken_hoehe + hoehe
+
+        visualisierungs_service.visualisiere_hebe_um(hoehe)
 
         return self.haken_hoehe
 
