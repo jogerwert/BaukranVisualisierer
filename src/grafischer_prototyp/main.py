@@ -139,14 +139,34 @@ def test_kran4():
     print(winkel)
     sleep(2)
     t_winkel = kran.test_func(winkel, 0, pos, None)
-    kran.senke_greifarm(0)
+    kran.senke_greifarm(4)
 
     pos = GrafikPosition()
-    pos.erzeuge_position(5, 6, 0)
+    pos.erzeuge_position(2, 3, 0)
     winkel = kran.berechne_drehwinkel_objekt(pos)
     print(winkel)
     t_winkel = kran.test_func(winkel, t_winkel, pos, bauteil3)
-    kran.senke_greifarm(0)
+    kran.senke_greifarm(4)
+    kran.erhoehe_greifarm(4)
+
+def test_kran5():
+    kran = GrafikKran()
+    kran.erzeuge_kran(0, 0, 5, 7)
+    bauteil3 = GrafikBauteil()
+    bauteil3.erzeuge_bauteil(4, 1, 0)
+    pos = GrafikPosition()
+    pos.erzeuge_position(4, 1 ,0)
+    winkel = kran.berechne_drehwinkel_objekt(pos)
+    t_winkel = kran.test_func(winkel, 0, pos, None)
+    kran.senke_greifarm(4,None)
+    kran.erhoehe_greifarm(2,bauteil3)
+    pos = GrafikPosition()
+    pos.erzeuge_position(4, 4, 0)
+    winkel = kran.berechne_drehwinkel_objekt(pos)
+    t_winkel = kran.test_func(winkel, t_winkel, pos, bauteil3)
+    #kran.senke_greifarm(2, bauteil3)
+    #kran.erhoehe_greifarm(4, None)
+
 
 def ausfuehrung_beispiel():
     beispiel_baufeld = GrafikBaufeld()
@@ -188,12 +208,187 @@ def ausfuehrung_beispiel():
                                                  beispiel_bauteile[1].erhalte_position())
     print(beispiel_bauteile[1].erhalte_position())
 
+def test_kran6():
+    beispiel_baufeld = GrafikBaufeld()
+    beispiel_baufeld.erzeuge_baufeld(10, 5)
+
+    beispiel_hindernis = []
+    beispiel_hindernis.append(GrafikHindernis())
+    beispiel_hindernis.append(GrafikHindernis())
+    beispiel_hindernis[0].erzeuge_hindernis(3, 2, 0)
+    beispiel_hindernis[1].erzeuge_hindernis(3, 2, 1)
+
+    beispiel_bauteile = []
+    beispiel_bauteile.append(GrafikBauteil())
+    beispiel_bauteile.append(GrafikBauteil())
+    beispiel_bauteile.append(GrafikBauteil())
+    beispiel_bauteile[0].erzeuge_bauteil(0, 2, 0)
+    beispiel_bauteile[1].erzeuge_bauteil(1, 2, 0)
+    beispiel_bauteile[2].erzeuge_bauteil(2, 2, 0)
+
+    beispiel_kran = GrafikKran()
+    beispiel_kran.erzeuge_kran(0, 0, 5, 10)
+
+    #anweisung 1
+    pos = GrafikPosition()
+    pos.erzeuge_position(1, 2, 0)
+    winkel = beispiel_kran.berechne_drehwinkel_objekt(pos)
+    t_winkel = beispiel_kran.test_func(winkel, 0, pos, None)
+    beispiel_kran.senke_greifarm(4, None)
+    beispiel_kran.erhoehe_greifarm(2, beispiel_bauteile[1])
+    pos = GrafikPosition()
+    pos.erzeuge_position(6, 2, 2)
+    winkel = beispiel_kran.berechne_drehwinkel_objekt(pos)
+    t_winkel = beispiel_kran.test_func(winkel, t_winkel, pos, beispiel_bauteile[1])
+    beispiel_kran.senke_greifarm(2,beispiel_bauteile[1])
+
+    # anweisung 2
+    beispiel_kran.erhoehe_greifarm(2, None)
+    pos = GrafikPosition()
+    pos.erzeuge_position(0, 2, 2)
+    winkel = beispiel_kran.berechne_drehwinkel_objekt(pos)
+    t_winkel = beispiel_kran.test_func(winkel, t_winkel, pos, None)
+    beispiel_kran.senke_greifarm(2, None)
+    beispiel_kran.erhoehe_greifarm(2, beispiel_bauteile[0])
+    pos = GrafikPosition()
+    pos.erzeuge_position(5, 2, 2)
+    winkel = beispiel_kran.berechne_drehwinkel_objekt(pos)
+    t_winkel = beispiel_kran.test_func(winkel, t_winkel, pos, beispiel_bauteile[0])
+    beispiel_kran.senke_greifarm(2, beispiel_bauteile[0])
+
+    # anweisung 3
+    beispiel_kran.erhoehe_greifarm(2, None)
+    pos = GrafikPosition()
+    pos.erzeuge_position(2, 2, 2)
+    winkel = beispiel_kran.berechne_drehwinkel_objekt(pos)
+    t_winkel = beispiel_kran.test_func(winkel, t_winkel, pos, None)
+    beispiel_kran.senke_greifarm(2, None)
+    beispiel_kran.erhoehe_greifarm(2, beispiel_bauteile[2])
+    pos = GrafikPosition()
+    pos.erzeuge_position(6, 2, 2)
+    winkel = beispiel_kran.berechne_drehwinkel_objekt(pos)
+    t_winkel = beispiel_kran.test_func(winkel, t_winkel, pos, beispiel_bauteile[2])
+    beispiel_kran.senke_greifarm(1, beispiel_bauteile[2])
+    beispiel_kran.erhoehe_greifarm(3, None)
+
+    print(beispiel_bauteile[0].erhalte_position())
+    print(beispiel_bauteile[1].erhalte_position())
+    print(beispiel_bauteile[2].erhalte_position())
+
+def test_kran7():
+    beispiel_baufeld = GrafikBaufeld()
+    beispiel_baufeld.erzeuge_baufeld(10, 5)
+
+    beispiel_hindernis = []
+    beispiel_hindernis.append(GrafikHindernis())
+    beispiel_hindernis.append(GrafikHindernis())
+    beispiel_hindernis[0].erzeuge_hindernis(3, 2, 0)
+    beispiel_hindernis[1].erzeuge_hindernis(3, 2, 1)
+
+    beispiel_bauteile = []
+    beispiel_bauteile.append(GrafikBauteil())
+    beispiel_bauteile.append(GrafikBauteil())
+    beispiel_bauteile.append(GrafikBauteil())
+    beispiel_bauteile.append(GrafikBauteil())
+    beispiel_bauteile[0].erzeuge_bauteil(0, 2, 0)
+    beispiel_bauteile[1].erzeuge_bauteil(1, 2, 0)
+    beispiel_bauteile[2].erzeuge_bauteil(2, 2, 0)
+    #beispiel_bauteile[3].erzeuge_bauteil(4, 4, 0)
+
+    beispiel_kran = GrafikKran()
+    beispiel_kran.erzeuge_kran(0, 0, 5, 10)
+
+    #anweisung 1
+    pos = GrafikPosition()
+    pos.erzeuge_position(1, 2, 0)
+    winkel = beispiel_kran.berechne_drehwinkel_objekt(pos)
+    t_winkel = beispiel_kran.test_func(winkel, 0, pos, None)
+    beispiel_kran.veraendere_greifarm_hoehe("senke",4, None)
+    beispiel_kran.veraendere_greifarm_hoehe("erhoehe",2, beispiel_bauteile[1])
+    pos = GrafikPosition()
+    pos.erzeuge_position(6, 2, 2)
+    winkel = beispiel_kran.berechne_drehwinkel_objekt(pos)
+    t_winkel = beispiel_kran.test_func(winkel, t_winkel, pos, beispiel_bauteile[1])
+    beispiel_kran.veraendere_greifarm_hoehe("senke",2,beispiel_bauteile[1])
+
+    # anweisung 2
+    beispiel_kran.veraendere_greifarm_hoehe("erhoehe",2, None)
+    pos = GrafikPosition()
+    pos.erzeuge_position(0, 2, 2)
+    winkel = beispiel_kran.berechne_drehwinkel_objekt(pos)
+    t_winkel = beispiel_kran.test_func(winkel, t_winkel, pos, None)
+    beispiel_kran.veraendere_greifarm_hoehe("senke",2, None)
+    beispiel_kran.veraendere_greifarm_hoehe("erhoehe",2, beispiel_bauteile[0])
+    pos = GrafikPosition()
+    pos.erzeuge_position(5, 2, 2)
+    winkel = beispiel_kran.berechne_drehwinkel_objekt(pos)
+    t_winkel = beispiel_kran.test_func(winkel, t_winkel, pos, beispiel_bauteile[0])
+    beispiel_kran.veraendere_greifarm_hoehe("senke",2, beispiel_bauteile[0])
+
+    # anweisung 3
+    beispiel_kran.veraendere_greifarm_hoehe("erhoehe",2, None)
+    pos = GrafikPosition()
+    pos.erzeuge_position(2, 2, 2)
+    winkel = beispiel_kran.berechne_drehwinkel_objekt(pos)
+    t_winkel = beispiel_kran.test_func(winkel, t_winkel, pos, None)
+    beispiel_kran.veraendere_greifarm_hoehe("senke", 2, None)
+    beispiel_kran.veraendere_greifarm_hoehe("erhoehe", 2, beispiel_bauteile[2])
+    pos = GrafikPosition()
+    pos.erzeuge_position(6, 2, 2)
+    winkel = beispiel_kran.berechne_drehwinkel_objekt(pos)
+    t_winkel = beispiel_kran.test_func(winkel, t_winkel, pos, beispiel_bauteile[2])
+    beispiel_kran.veraendere_greifarm_hoehe("senke", 1, beispiel_bauteile[2])
+    beispiel_kran.veraendere_greifarm_hoehe("erhoehe",3, None)
+
+    #pos = GrafikPosition()
+    #pos.erzeuge_position(4, 4, 2)
+    #winkel = beispiel_kran.berechne_drehwinkel_objekt(pos)
+    #t_winkel = beispiel_kran.test_func(winkel, t_winkel, pos, None)
+    #beispiel_kran.veraendere_greifarm_hoehe("senke",4, None)
+    #beispiel_kran.veraendere_greifarm_hoehe("erhoehe",2, beispiel_bauteile[3])
+    #pos = GrafikPosition()
+    #pos.erzeuge_position(7, 3, 2)
+    #winkel = beispiel_kran.berechne_drehwinkel_objekt(pos)
+    #t_winkel = beispiel_kran.test_func(winkel, t_winkel, pos, beispiel_bauteile[3])
+    #beispiel_kran.veraendere_greifarm_hoehe("senke",2, beispiel_bauteile[3])
+    #beispiel_kran.veraendere_greifarm_hoehe("erhoehe",4, None)
+
+    print(beispiel_bauteile[0].erhalte_position())
+    print(beispiel_bauteile[1].erhalte_position())
+    print(beispiel_bauteile[2].erhalte_position())
+    #print(beispiel_bauteile[3].erhalte_position())
+
+def test_kran8():
+    beispiel_baufeld = GrafikBaufeld()
+    beispiel_baufeld.erzeuge_baufeld(10, 10)
+
+    beispiel_kran = GrafikKran()
+    beispiel_kran.erzeuge_kran(0, 0, 5, 10)
+
+    beispiel_bauteile = []
+    beispiel_bauteile.append(GrafikBauteil())
+    beispiel_bauteile[0].erzeuge_bauteil(2,2,0)
+    pos = GrafikPosition()
+    pos.erzeuge_position(2, 2, 0)
+    winkel = beispiel_kran.berechne_drehwinkel_objekt(pos)
+    t_winkel = beispiel_kran.test_func(winkel, 0, pos, None)
+    beispiel_kran.veraendere_greifarm_hoehe("senke", 4, None)
+    beispiel_kran.veraendere_greifarm_hoehe("erhoehe", 2, beispiel_bauteile[0])
+    pos = GrafikPosition()
+    pos.erzeuge_position(4, 4, 2)
+    winkel = beispiel_kran.berechne_drehwinkel_objekt(pos)
+    t_winkel = beispiel_kran.test_func(winkel, t_winkel, pos, beispiel_bauteile[0])
+    beispiel_kran.veraendere_greifarm_hoehe("senke", 2, beispiel_bauteile[0])
+
 scene.background = color.white
+scene.width = 1920
+scene.height = 1080
 #ausfuehrung_beispiel()
-test_baufeld()
+#test_baufeld()
 #test_bauteil()
 #test_hindernis()
-test_kran4()
+#sleep(3)
+test_kran8()
 while True:
 
     pass
