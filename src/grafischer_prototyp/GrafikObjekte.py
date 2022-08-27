@@ -1,8 +1,9 @@
 from vpython import *
 
 class GrafikBauteil:
-    def erzeuge_bauteil(self, eingabe_position_wert_x, eingabe_position_wert_y, eingabe_position_wert_z):
+    def erzeuge_bauteil(self,name, eingabe_position_wert_x, eingabe_position_wert_y, eingabe_position_wert_z):
         bauteil_position = vector(eingabe_position_wert_x, eingabe_position_wert_z, eingabe_position_wert_y)
+        self.name = name
         self.bauteil = box(pos=bauteil_position, color=vector(0, 0, 0), opacity=0.8)
 
     def erhalte_position(self):

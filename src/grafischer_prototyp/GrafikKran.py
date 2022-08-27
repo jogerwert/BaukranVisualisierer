@@ -1,7 +1,8 @@
 import numpy
 from vpython import *
 from math import *
-from GrafikObjekte import *
+#from GrafikObjekte import *
+import src.grafischer_prototyp.GrafikObjekte
 
 class GrafikKran:
     def erzeuge_kran(self, ev_x_wert, ev_y_wert, ev_hoehe_kran, ev_ausladung_kran):
@@ -37,6 +38,7 @@ class GrafikKran:
                     ev_objekt.erhalte_position().y = round(ev_objekt.erhalte_position().y, 0)
                 self.greifarm.pos.y = round(self.greifarm.pos.y, 0)
                 break
+        return "unlock"
 
     def erhalte_posistion_laufkatze(self):
         return self.laufkatze.pos
@@ -58,7 +60,7 @@ class GrafikKran:
         return numpy.degrees(numpy.arccos(iv_wert_fuer_arccos))
 
     def berechne_punkt_links_oder_rechts_gerade(self, ev_objekt, ev_akueller_winkel_gerade):
-        iv_objekt = GrafikPosition()
+        iv_objekt = src.grafischer_prototyp.GrafikObjekte.GrafikPosition()
         iv_objekt.erzeuge_position(self.laufkatze.pos.x, self.laufkatze.pos.z, self.laufkatze.pos.y)
 
         iv_punkt_3D = self.berechne_punkt_kreisgleichung_abhaengig_winkel(ev_akueller_winkel_gerade - 1, None, iv_objekt)
@@ -89,7 +91,7 @@ class GrafikKran:
             iv_x = iv_radius * cos(radians(ev_winkel)) + self.turm.pos.x
             iv_y = iv_radius * sin(radians(ev_winkel)) + self.turm.pos.z
             iv_z = ev_objekt.erhalte_position().y
-            iv_punkt = GrafikPosition()
+            iv_punkt = src.grafischer_prototyp.GrafikObjekte.GrafikPosition()
             iv_punkt.erzeuge_position(iv_x, iv_y, iv_z)
             return iv_punkt
 
@@ -108,7 +110,7 @@ class GrafikKran:
     def test_func(self, winkel, aktueller_winkel_ausleger_anfang, objekt_pos, objekt_bauteil):
         temp_punkt_2D = numpy.array([objekt_pos.erhalte_position().x, objekt_pos.erhalte_position().z])
 
-        temp_objekt = GrafikPosition()
+        temp_objekt = src.grafischer_prototyp.GrafikObjekte.GrafikPosition()
         temp_objekt.erzeuge_position(self.laufkatze.pos.x, self.laufkatze.pos.z, self.laufkatze.pos.y)
         temp_punkt_3D = self.berechne_punkt_kreisgleichung_abhaengig_winkel(winkel, None, temp_objekt)
         temp_punkt_2D_nach_rotation = numpy.array([temp_punkt_3D.erhalte_position().x, temp_punkt_3D.erhalte_position().z])
@@ -122,14 +124,14 @@ class GrafikKran:
         a = self.berechne_punkt_links_oder_rechts_gerade(objekt_pos ,aktueller_winkel_ausleger_anfang)
 
         while True:
-            rate(1)
+            rate(1000)
             if winkel == 0:
                 print(winkel == 0)
                 while True:
                     if x_zahler < x_abstand_zwischen_zwei_puntken:
                         x_zahler += x_erhoehung
                         b = 1
-                        temp_objekt = GrafikPosition()
+                        temp_objekt = src.grafischer_prototyp.GrafikObjekte.GrafikPosition()
                         temp_objekt.erzeuge_position(self.laufkatze.pos.x,
                                                      self.laufkatze.pos.z,
                                                      self.laufkatze.pos.y)
@@ -165,7 +167,7 @@ class GrafikKran:
                     t_winkel = t_winkel - i_winkel
                     t_winkel = (winkel - t_winkel) + t_winkel
 
-                temp_objekt = GrafikPosition()
+                temp_objekt = src.grafischer_prototyp.GrafikObjekte.GrafikPosition()
                 temp_objekt.erzeuge_position(self.ausleger.pos.x + self.ausleger.axis.x,
                                              self.ausleger.pos.z + self.ausleger.axis.z,
                                              self.ausleger.pos.y + self.ausleger.axis.y - 0.5)
@@ -173,7 +175,7 @@ class GrafikKran:
                 self.ausleger.axis.x = temp_punkt_3D.erhalte_position().x-self.ausleger.pos.x
                 self.ausleger.axis.z = temp_punkt_3D.erhalte_position().z-self.ausleger.pos.z
 
-                temp_objekt = GrafikPosition()
+                temp_objekt = src.grafischer_prototyp.GrafikObjekte.GrafikPosition()
                 temp_objekt.erzeuge_position(self.laufkatze.pos.x, self.laufkatze.pos.z, self.laufkatze.pos.y)
                 temp_punkt_3D = self.berechne_punkt_kreisgleichung_abhaengig_winkel(aktueller_winkel_ausleger_anfang + a*t_winkel,  None, temp_objekt)
 
@@ -193,7 +195,7 @@ class GrafikKran:
                 if x_zahler < x_abstand_zwischen_zwei_puntken:
                     x_zahler += x_erhoehung
                     b = 1
-                    temp_objekt = GrafikPosition()
+                    temp_objekt = src.grafischer_prototyp.GrafikObjekte.GrafikPosition()
                     temp_objekt.erzeuge_position(self.laufkatze.pos.x,
                                                  self.laufkatze.pos.z,
                                                  self.laufkatze.pos.y)
@@ -222,4 +224,4 @@ class GrafikKran:
                         objekt_bauteil.erhalte_position().z = temp_punkt_3D.erhalte_position().z
             else:
                 break
-        return a*t_winkel + aktueller_winkel_ausleger_anfang
+        return "unlock" #a*t_winkel + aktueller_winkel_ausleger_anfang

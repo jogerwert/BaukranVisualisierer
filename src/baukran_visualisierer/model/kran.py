@@ -53,6 +53,8 @@ class Kran:
         else:
             raise BasLogicError(f'An der Koordinate ({haken_x}, {haken_y}, {haken_z}) befindet sich kein Bauteil!')
 
+        visualisierungs_service.visualisiere_greife(haken_z)
+
     def richte_aus(self):
         # TODO: Testen
 
@@ -140,7 +142,11 @@ class Kran:
 
         self.haken_hoehe = self.haken_hoehe - hoehe
 
-        visualisierungs_service.visualisiere_senke_um(hoehe)
+        bauteil_name = None
+        if self.haken_bauteil is not None:
+            bauteil_name = self.haken_bauteil.name
+
+        visualisierungs_service.visualisiere_senke_um(hoehe, bauteil_name)
 
         return self.haken_hoehe
 
@@ -155,7 +161,11 @@ class Kran:
 
         self.haken_hoehe = self.haken_hoehe + hoehe
 
-        visualisierungs_service.visualisiere_hebe_um(hoehe)
+        bauteil_name = None
+        if self.haken_bauteil is not None:
+            bauteil_name = self.haken_bauteil.name
+
+        visualisierungs_service.visualisiere_hebe_um(hoehe, bauteil_name)
 
         return self.haken_hoehe
 
