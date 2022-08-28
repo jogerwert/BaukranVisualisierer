@@ -18,4 +18,7 @@ def file_picker():
         title='Bauablaufbeschreibung auswählen',
         filetypes=filetypes
     )
+
+    root.destroy()
+
     return dateiname
