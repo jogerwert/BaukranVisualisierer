@@ -10,7 +10,7 @@ baustelle_regex_dict = {
 
 # Regulaere Ausdruecke, um die Komponenten der Baustelle zu finden, z.B.: Baufeld, Kran, Bauteile, Montageanweisungen
 komponenten_regex_dict = {
-    'baufeld': re.compile(r'\s*Baufeld : Abmessung ?\((?P<breite>\d{1,3}), (?P<laenge>\d{1,3})\)\s*\n'),
+    'baufeld': re.compile(r'\s*Baufeld : Abmessung ?\((?P<x>\d{1,3}), (?P<y>\d{1,3})\)\s*\n'),
     'gegenstand': re.compile(r'\s*Gegenstand : Position ?\((?P<x>\d{1,3}), (?P<y>\d{1,3}), (?P<z>\d{1,3})\)\s*\n'),
     'kran': re.compile(r'\s*Kran : Position ?\((?P<x>\d{1,3}), (?P<y>\d{1,3})\) '
                        r'Hoehe (?P<hoehe>\d{1,3}) Ausladung (?P<ausladung>\d{1,3})\s*\n'),

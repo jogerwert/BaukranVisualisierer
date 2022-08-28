@@ -7,7 +7,7 @@ from src.baukran_visualisierer.model.baustelle import Baustelle
 from src.baukran_visualisierer.model.bauteil import Bauteil
 from src.baukran_visualisierer.model.gegenstand import Gegenstand
 from src.baukran_visualisierer.model.kran import Kran
-from src.baukran_visualisierer.parser import regulaere_ausdruecke
+from src.baukran_visualisierer.datei_management import regulaere_ausdruecke
 
 
 def _parse_zeile(zeile, regex_dict):
@@ -72,10 +72,10 @@ def _parse_komponenten(datei):
         key, match_regex = _parse_zeile(zeile, regulaere_ausdruecke.komponenten_regex_dict)
 
         if key == 'baufeld':
-            breite = int(match_regex.group('breite'))
-            laenge = int(match_regex.group('laenge'))
+            x = int(match_regex.group('x'))
+            y = int(match_regex.group('y'))
 
-            baufeld = Baufeld(laenge, breite)
+            baufeld = Baufeld(x, y)
 
         elif key == 'gegenstand':
             pos_x = int(match_regex.group('x'))

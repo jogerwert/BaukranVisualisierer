@@ -1,13 +1,18 @@
 import getopt
 import sys
 
-from src.baukran_visualisierer.parser import parser
-from src.baukran_visualisierer.service import visualisierungs_service
+from src.baukran_visualisierer.datei_management import file_picker
+from src.baukran_visualisierer.service import visualisierungs_service, parser_service
 
 
 def parse_baustelle(dateipfad):
-    baustelle = parser.parse_baustelle(dateipfad)
+    baustelle = parser_service.parse_baustelle(dateipfad)
     return baustelle
+
+
+def start_file_picker():
+    dateiname = file_picker.file_picker()
+    start_visualisierung(dateiname)
 
 
 def start_cmd(eingabedatei):
@@ -29,7 +34,7 @@ def main(argv):
         sys.exit(2)
 
     if len(opts) == 0:
-        opts.append(("-h", ""))
+        start_file_picker()
 
     for opt, arg in opts:
         match opt:
@@ -38,11 +43,10 @@ def main(argv):
                 sys.exit()
             case '-i' | '--input':
                 eingabedatei = arg
+                start_visualisierung(eingabedatei)
             case _:
                 print(f'Unbekannte Option "{opt}" wurde gefunden.')
                 sys.exit(2)
-
-    start_visualisierung(eingabedatei)
 
 
 if __name__ == '__main__':

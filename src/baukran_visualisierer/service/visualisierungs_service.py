@@ -23,7 +23,7 @@ def visualisiere_baustelle(baustelle):
     global_baustelle.speichere_Baustelle(baustelle)
 
     beispiel_baufeld = src.grafischer_prototyp.GrafikBaufeld.GrafikBaufeld()
-    beispiel_baufeld.erzeuge_baufeld(baustelle.baufeld.breite_y, baustelle.baufeld.laenge_x)
+    beispiel_baufeld.erzeuge_baufeld(baustelle.baufeld.laenge_x, baustelle.baufeld.breite_y)
     #beispiel_kran = src.grafischer_prototyp.GrafikKran.GrafikKran()
     global_kran.erzeuge_kran(baustelle.kran.position_x, baustelle.kran.position_y, baustelle.kran.hoehe,
                                baustelle.kran.ausladung)
