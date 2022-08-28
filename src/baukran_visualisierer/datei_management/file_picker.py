@@ -8,7 +8,7 @@ def file_picker():
     root = Tk()
     root.title('Baukran Visualisierer')
     root.resizable(False, False)
-    root.geometry('300x150')
+    root.geometry('300x10')
 
     filetypes = (
         ('Bauablaufbeschreibungen', '*.bas'),
