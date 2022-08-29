@@ -26,7 +26,7 @@ class GrafikKran:
     def veraendere_greifarm_hoehe(self, ev_richtung, ev_erhoehe, ev_objekt):
         iv_temp = iv_richtung = 0
         while True:
-            rate(1000)
+            rate(10)
             if iv_temp < ev_erhoehe:
                 if ev_richtung == "senke":
                     iv_richtung = -0.1

@@ -31,6 +31,7 @@ def visualisiere_baustelle(baustelle):
         button_liste[0].disabled = False
         print("naechste_krananweisung", b.text)
 
+
     def C(b):
         button_liste[1].disabled = True
         baustelle.naechste_montageanweisung_ausfuehren()
@@ -70,11 +71,16 @@ def visualisiere_baustelle(baustelle):
         temp_hindernisse = src.grafischer_prototyp.GrafikObjekte.GrafikHindernis()
         temp_hindernisse.erzeuge_hindernis(hindernisse.position_x, hindernisse.position_y, hindernisse.position_z)
 
-
-    #scene.append_to_caption('\n\n')
     while True:
         pass
-
+    #scene.append_to_caption('\n\n')
+    #while True:
+    #    #if scene.updates.values()
+    #    if scene.visible == False:
+    #        print("close")
+    #    if not scene.glow:
+    #        print("close 2")
+    #    pass
 
 def visualisiere_greife(haken_z):
     print(global_baustelle.erhalte_Baustelle())
