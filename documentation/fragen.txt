@@ -10,3 +10,6 @@ Fragen zu Anweisungen:
     * Wie verhalten sich Montageanweisungen?
         * Muss der Kranhaken erst positioniert werden oder wird der Haken automatisch durch Greifen des Bauteils zu dem Bauteil gebracht? (Beispiel Dokumentation -> erst positionieren; Video -> greifen positioniert automatisch)
             -> Greife kein Bewegungsbefehl, Haken muss erst positioniert werden
+
+    * Krangeschwindigkeiten:
+        Winkelgeschwindigkeit: 10°/s, Haken: 1 k/s (Kästchen pro Sekunde), Laufkatze: 1 k/s

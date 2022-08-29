@@ -4,6 +4,8 @@ import py2exe
 setup(
     name='BaukranVisualisierer',
     version='0.1',
-    windows=['baukran_visualisierer.py']
-
+    console=['baukran_visualisierer.py'],
+    install_requires=[
+          'vpython',
+    ]
 )
