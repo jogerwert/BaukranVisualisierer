@@ -39,7 +39,7 @@ def main(argv):
     for opt, arg in opts:
         match opt:
             case '-h':
-                print("main.py -i <Eingabedatei>")
+                print("baukran_visualisierer.py -i <Eingabedatei>")
                 sys.exit()
             case '-i' | '--input':
                 eingabedatei = arg
