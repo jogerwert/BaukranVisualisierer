@@ -22,6 +22,7 @@ class GrafikKran:
         self.laufkatze = box(pos=iv_laufkatze_position, length=iv_laenge, height=iv_hoehe, width=iv_breite, color=vector(0, 1, 0))
         self.greifarm = pyramid(pos=iv_greifarm_position, size=vector(0.5, 0.5, 0.5), axis=vector(0, 1, 0))
         self.time = 0
+        self.rate = 1
 
     def animationsgeschwindigkeit(self, wert):
         self.rate = 1 + wert * 100
