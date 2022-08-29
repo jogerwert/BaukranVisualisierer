@@ -8,15 +8,17 @@ class GrafikKran:
     def erzeuge_kran(self, ev_x_wert, ev_y_wert, ev_hoehe_kran, ev_ausladung_kran):
         iv_laenge = iv_breite = iv_hoehe = 0.5
         iv_turm_position = vector(ev_x_wert, 0, ev_y_wert)
-        iv_ausleger_position = vector(ev_x_wert, ev_hoehe_kran, ev_y_wert)
-        iv_drehkranz_position = vector(ev_x_wert, ev_hoehe_kran, ev_y_wert)
-        iv_laufkatze_position = vector(ev_x_wert+1, ev_hoehe_kran - 0.5, ev_y_wert)
-        iv_greifarm_position = vector(ev_x_wert+1, ev_hoehe_kran - 1, ev_y_wert)
+        iv_ausleger_position = vector(ev_x_wert, ev_hoehe_kran+1, ev_y_wert)
+        iv_drehkranz_position = vector(ev_x_wert, ev_hoehe_kran+1, ev_y_wert)
+        iv_laufkatze_position = vector(ev_x_wert+1, ev_hoehe_kran+0.5, ev_y_wert)
+        iv_greifarm_position = vector(ev_x_wert+1, ev_hoehe_kran, ev_y_wert)
+        iv_verbindunsseil_position = vector(ev_x_wert+1, ev_hoehe_kran+0.5, ev_y_wert)
 
         box(pos=iv_turm_position)
-        self.turm = cylinder(pos=iv_turm_position, radius=0.5, length=ev_hoehe_kran, axis=vector(0, 1, 0))
+        self.turm = cylinder(pos=iv_turm_position, radius=0.5, length=ev_hoehe_kran+1, axis=vector(0, 1, 0))
         self.ausleger = cylinder(pos=iv_ausleger_position, radius=0.5, length=ev_ausladung_kran, axis=vector(1, 0, 0))
         self.drehkranz = sphere(pos=iv_drehkranz_position, radius=0.5)
+        self.verbindunsseil = cylinder(pos=iv_verbindunsseil_position ,radius=0.01, axis=vector(0, 1, 0), length=0.01)
         self.laufkatze = box(pos=iv_laufkatze_position, length=iv_laenge, height=iv_hoehe, width=iv_breite, color=vector(0, 1, 0))
         self.greifarm = pyramid(pos=iv_greifarm_position, size=vector(0.5, 0.5, 0.5), axis=vector(0, 1, 0))
 
@@ -30,6 +32,9 @@ class GrafikKran:
                 elif ev_richtung == "erhoehe":
                     iv_richtung = 0.1
                 self.greifarm.pos.y = round(self.greifarm.pos.y + iv_richtung, 1)
+                self.verbindunsseil.pos = self.greifarm.pos
+                self.verbindunsseil.pos.y = self.verbindunsseil.pos.y + 0.5
+                self.verbindunsseil.length = round(self.verbindunsseil.length - iv_richtung, 1)
                 iv_temp += 0.1
                 if ev_objekt is not None:
                     ev_objekt.erhalte_position().y = round(ev_objekt.erhalte_position().y + iv_richtung, 1)
@@ -37,6 +42,7 @@ class GrafikKran:
                 if ev_objekt is not None:
                     ev_objekt.erhalte_position().y = round(ev_objekt.erhalte_position().y, 0)
                 self.greifarm.pos.y = round(self.greifarm.pos.y, 0)
+                self.verbindunsseil.length = round(self.verbindunsseil.length, 0)
                 break
         return "unlock"
 
@@ -95,17 +101,31 @@ class GrafikKran:
             iv_punkt.erzeuge_position(iv_x, iv_y, iv_z)
             return iv_punkt
 
-    def berechne_bewegunszeit_laufkatze_ausleger(self, ev_winkel, ev_abstand_laufkatze_punkt):
+    def berechne_bewegunszeit_laufkatze_ausleger(self, ev_winkel, ev_abstand_laufkatze_punkt, position):
         iv_laufkatzenzeit = ev_abstand_laufkatze_punkt
         iv_auslegerzeit = ev_winkel / 10
-        #iv_greifarmzeit = ev_hoehe
-        if iv_laufkatzenzeit < iv_auslegerzeit:
-            iv_laufkatzenbewegung_pro_sekunde = 1 * iv_laufkatzenzeit / iv_auslegerzeit
-            iv_auslegerbewegung_pro_sekund = 10
+        if self.greifarm.pos.y  < position.erhalte_position().y :
+            iv_greifarmzeit = position.erhalte_position().y - self.greifarm.pos.y
         else:
+            iv_greifarmzeit = self.greifarm.pos.y - position.erhalte_position().y
+        #iv_greifarmzeit = ev_hoehe
+        print(iv_greifarmzeit)
+        if iv_laufkatzenzeit < iv_auslegerzeit and iv_greifarmzeit < iv_auslegerzeit:
+            iv_laufkatzenbewegung_pro_sekunde = 1 * iv_laufkatzenzeit / iv_auslegerzeit
+            iv_greifarmbewegung_pro_sekunde = 1 * iv_greifarmzeit / iv_auslegerzeit
+            iv_auslegerbewegung_pro_sekund = 10
+            print("if")
+        elif iv_auslegerzeit < iv_laufkatzenzeit and iv_greifarmzeit < iv_laufkatzenzeit:
             iv_laufkatzenbewegung_pro_sekunde = 1
             iv_auslegerbewegung_pro_sekund = 10 * iv_auslegerzeit / iv_laufkatzenzeit
-        return iv_laufkatzenbewegung_pro_sekunde, iv_auslegerbewegung_pro_sekund
+            iv_greifarmbewegung_pro_sekunde = 1 * iv_greifarmzeit / iv_laufkatzenzeit
+            print("elif")
+        else:
+            iv_laufkatzenbewegung_pro_sekunde = 1 * iv_laufkatzenzeit / iv_greifarmzeit
+            iv_auslegerbewegung_pro_sekund = 10 * iv_auslegerzeit / iv_greifarmzeit
+            iv_greifarmbewegung_pro_sekunde = 1
+            print("else")
+        return iv_laufkatzenbewegung_pro_sekunde, iv_auslegerbewegung_pro_sekund, iv_greifarmbewegung_pro_sekunde
 
     def test_func(self, winkel, aktueller_winkel_ausleger_anfang, objekt_pos, objekt_bauteil):
         temp_punkt_2D = numpy.array([objekt_pos.erhalte_position().x, objekt_pos.erhalte_position().z])
@@ -116,15 +136,25 @@ class GrafikKran:
         temp_punkt_2D_nach_rotation = numpy.array([temp_punkt_3D.erhalte_position().x, temp_punkt_3D.erhalte_position().z])
 
         x_abstand_zwischen_zwei_puntken = numpy.linalg.norm(temp_punkt_2D - temp_punkt_2D_nach_rotation)
-        x_erhoehung, i_winkel = self.berechne_bewegunszeit_laufkatze_ausleger(winkel, x_abstand_zwischen_zwei_puntken)
+        x_erhoehung, i_winkel, x_erhoehung_hoehe = self.berechne_bewegunszeit_laufkatze_ausleger(winkel,
+                                                                            x_abstand_zwischen_zwei_puntken,objekt_pos)
         bereits_gedreht = x_zahler = t_winkel = 0
         x_erhoehung = x_erhoehung/10
         i_winkel = i_winkel/10
-
+        x_erhoehung_hoehe = x_erhoehung_hoehe/10
+        bereits_erhoeht = 0
         a = self.berechne_punkt_links_oder_rechts_gerade(objekt_pos ,aktueller_winkel_ausleger_anfang)
+        if self.greifarm.pos.y < objekt_pos.erhalte_position().y:
+            hoehe = objekt_pos.erhalte_position().y - self.greifarm.pos.y
+        else:
+            hoehe = self.greifarm.pos.y - objekt_pos.erhalte_position().y
+        print(x_erhoehung)
+        print(i_winkel)
+        print(x_erhoehung_hoehe)
+        #print(hoehe)
 
         while True:
-            rate(1000)
+            rate(10)
             if winkel == 0:
                 print(winkel == 0)
                 while True:
@@ -153,14 +183,37 @@ class GrafikKran:
                         self.laufkatze.pos.z = temp_punkt_3D.erhalte_position().z
                         self.greifarm.pos.x = temp_punkt_3D.erhalte_position().x
                         self.greifarm.pos.z = temp_punkt_3D.erhalte_position().z
+                        self.verbindunsseil.pos.x = temp_punkt_3D.erhalte_position().x
+                        self.verbindunsseil.pos.z = temp_punkt_3D.erhalte_position().z
                         #self.greifarm.pos.y = self.laufkatze.pos.y - 0.5
                         if objekt_bauteil is not None:
                             objekt_bauteil.erhalte_position().x = temp_punkt_3D.erhalte_position().x
-                            #objekt_bauteil.erhalte_position().y = temp_punkt_3D.erhalte_position().y - 0.5
+                            objekt_bauteil.erhalte_position().y = self.greifarm.pos.y#temp_punkt_3D.erhalte_position().y - 0.5
                             objekt_bauteil.erhalte_position().z = temp_punkt_3D.erhalte_position().z
                     else:
                         break
                 break
+
+            if bereits_erhoeht < hoehe:
+                bereits_erhoeht = bereits_erhoeht + x_erhoehung_hoehe
+                if bereits_erhoeht > hoehe:
+                    x_erhoehung_hoehe = hoehe - (bereits_erhoeht - x_erhoehung_hoehe)
+
+                if objekt_pos.erhalte_position().y < self.greifarm.pos.y:
+                    self.greifarm.pos.y = self.greifarm.pos.y - x_erhoehung_hoehe  # round(self.greifarm.pos.y - x_erhoehung_hoehe, 1)
+                    print(self.greifarm.pos.y)
+                    self.verbindunsseil.pos = self.greifarm.pos
+                    self.verbindunsseil.pos.y = self.verbindunsseil.pos.y + 0.5
+                    self.verbindunsseil.length = self.verbindunsseil.length + x_erhoehung_hoehe  # round(self.verbindunsseil.length + x_erhoehung_hoehe, 1)
+                elif self.greifarm.pos.y < objekt_pos.erhalte_position().y:
+                    self.greifarm.pos.y = self.greifarm.pos.y + x_erhoehung_hoehe  # round(self.greifarm.pos.y + x_erhoehung_hoehe, 1)
+                    print(self.greifarm.pos.y)
+                    self.verbindunsseil.pos = self.greifarm.pos
+                    self.verbindunsseil.pos.y = self.verbindunsseil.pos.y + 0.5
+                    self.verbindunsseil.length = self.verbindunsseil.length - x_erhoehung_hoehe  # round(self.verbindunsseil.length - x_erhoehung_hoehe, 1)
+            #else:
+            #    break
+
             if bereits_gedreht < winkel:
                 t_winkel += i_winkel
                 if t_winkel > winkel:
@@ -185,6 +238,8 @@ class GrafikKran:
                 self.greifarm.pos.x = temp_punkt_3D.erhalte_position().x
                 #self.greifarm.pos.y = temp_punkt_3D.erhalte_position().y -0.5
                 self.greifarm.pos.z = temp_punkt_3D.erhalte_position().z
+                self.verbindunsseil.pos.x = temp_punkt_3D.erhalte_position().x
+                self.verbindunsseil.pos.z = temp_punkt_3D.erhalte_position().z
                 if objekt_bauteil is not None:
                     objekt_bauteil.erhalte_position().x = temp_punkt_3D.erhalte_position().x
                     #objekt_bauteil.erhalte_position().y = temp_punkt_3D.erhalte_position().y-0.5
@@ -217,11 +272,18 @@ class GrafikKran:
                     self.laufkatze.pos.z = temp_punkt_3D.erhalte_position().z
                     self.greifarm.pos.x = temp_punkt_3D.erhalte_position().x
                     self.greifarm.pos.z = temp_punkt_3D.erhalte_position().z
+                    self.verbindunsseil.pos.x = temp_punkt_3D.erhalte_position().x
+                    self.verbindunsseil.pos.z = temp_punkt_3D.erhalte_position().z
                     #self.greifarm.pos.y = self.laufkatze.pos.y - 0.5
+
+
                     if objekt_bauteil is not None:
                         objekt_bauteil.erhalte_position().x = temp_punkt_3D.erhalte_position().x
-                        #objekt_bauteil.erhalte_position().y = temp_punkt_3D.erhalte_position().y - 0.5
+                        objekt_bauteil.erhalte_position().y = self.greifarm.pos.y#temp_punkt_3D.erhalte_position().y - 0.5
                         objekt_bauteil.erhalte_position().z = temp_punkt_3D.erhalte_position().z
+
             else:
                 break
+        self.greifarm.pos.y = round(self.greifarm.pos.y,0)
+        print(self.greifarm.pos)
         return "unlock" #a*t_winkel + aktueller_winkel_ausleger_anfang

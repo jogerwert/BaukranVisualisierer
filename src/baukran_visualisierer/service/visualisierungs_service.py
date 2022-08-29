@@ -17,10 +17,35 @@ class virt_Baustelle:
 global_baustelle = virt_Baustelle(None)
 global_kran = src.grafischer_prototyp.GrafikKran.GrafikKran()
 bauteil_liste = []
+button_liste = []
 
 def visualisiere_baustelle(baustelle):
     # Visualisiert Grundbaustelle
-    global_baustelle.speichere_Baustelle(baustelle)
+    def B(b):
+        button_liste[0].disabled = True
+        baustelle.naechste_krananweisung_ausfuehren()
+        button_liste[0].disabled = False
+        print("naechste_krananweisung", b.text)
+
+    def C(b):
+        button_liste[1].disabled = True
+        baustelle.naechste_montageanweisung_ausfuehren()
+        button_liste[1].disabled = False
+        print("naechste_montageanweisung", b.text)
+
+    def D(b):
+        button_liste[2].disabled = True
+        baustelle.alle_montageanweisungen_ausfuehren()
+        button_liste[2].disabled = False
+        print("alle_montageanweisungen", b.text)
+
+    button_liste.append(button(bind=B, text='Naechste Krananweisung'))
+    button_liste.append(button(bind=C, text='Naechste Montageanweisung'))
+    button_liste.append(button(bind=D, text='Alle Montageanweisungen'))
+
+
+    einstellen_Bildwerte()
+    #global_baustelle.speichere_Baustelle(baustelle)
 
     beispiel_baufeld = src.grafischer_prototyp.GrafikBaufeld.GrafikBaufeld()
     beispiel_baufeld.erzeuge_baufeld(baustelle.baufeld.laenge_x, baustelle.baufeld.breite_y)
@@ -35,16 +60,11 @@ def visualisiere_baustelle(baustelle):
         temp_hindernisse = src.grafischer_prototyp.GrafikObjekte.GrafikHindernis()
         temp_hindernisse.erzeuge_hindernis(hindernisse.position_x, hindernisse.position_y, hindernisse.position_z)
 
-    box()
 
-    def B(b):
-        baustelle.naechste_krananweisung_ausfuehren()
-        print("The button said this: ", b.text)
-
-    button(bind=B, text='Click me!')
-    scene.append_to_caption('\n\n')
+    #scene.append_to_caption('\n\n')
     while True:
         pass
+
 
 def visualisiere_greife(haken_z):
     print(global_baustelle.erhalte_Baustelle())
@@ -54,9 +74,9 @@ def visualisiere_greife(haken_z):
     global_kran.veraendere_greifarm_hoehe("senke", hoehe, None)
 
 def visualisiere_bringe_an(winkel_vorher, winkel_nachher, haken_x, haken_y, haken_z, bauteil_name):
-    print("test")
-    print(winkel_vorher)
-    print(winkel_nachher)
+    #print("test")
+    #print(winkel_vorher)
+    #print(winkel_nachher)
     pos = src.grafischer_prototyp.GrafikObjekte.GrafikPosition()
     pos.erzeuge_position(haken_x, haken_y, haken_z)
     if winkel_nachher - winkel_vorher < 0:
@@ -88,3 +108,8 @@ def visualisiere_hebe_um(hoehe, bauteil_name):
             if bauteil.name == bauteil_name:
                 Objekt = bauteil
     global_kran.veraendere_greifarm_hoehe("erhoehe", hoehe, Objekt)
+
+def einstellen_Bildwerte():
+    scene.background = color.white
+    scene.width = 1920
+    scene.height = 1080
