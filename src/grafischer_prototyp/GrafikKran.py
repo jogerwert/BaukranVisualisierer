@@ -155,11 +155,11 @@ class GrafikKran:
         print(x_erhoehung_hoehe)
         #print(hoehe)
 
-        if x_erhoehung == 1:
+        if x_erhoehung == 0.1:
             self.time = self.time + x_abstand_zwischen_zwei_puntken
-        elif i_winkel == 10:
+        elif i_winkel == 1:
             self.time = self.time + winkel/10
-        elif x_erhoehung ==1:
+        elif x_erhoehung_hoehe == 0.1:
             self.time = self.time + hoehe
 
         while True:
