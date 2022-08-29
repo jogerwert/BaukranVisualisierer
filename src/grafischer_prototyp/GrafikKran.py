@@ -23,10 +23,13 @@ class GrafikKran:
         self.greifarm = pyramid(pos=iv_greifarm_position, size=vector(0.5, 0.5, 0.5), axis=vector(0, 1, 0))
         self.time = 0
 
+    def animationsgeschwindigkeit(self, wert):
+        self.rate = 1 + wert * 100
+
     def veraendere_greifarm_hoehe(self, ev_richtung, ev_erhoehe, ev_objekt):
         iv_temp = iv_richtung = 0
         while True:
-            rate(10)
+            rate(self.rate)
             if iv_temp < ev_erhoehe:
                 if ev_richtung == "senke":
                     iv_richtung = -0.1
@@ -163,7 +166,7 @@ class GrafikKran:
             self.time = self.time + hoehe
 
         while True:
-            rate(10)
+            rate(self.rate)
             if winkel == 0:
                 print(winkel == 0)
                 while True:

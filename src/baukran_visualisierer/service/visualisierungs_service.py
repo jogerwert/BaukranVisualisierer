@@ -50,10 +50,16 @@ def visualisiere_baustelle(baustelle):
         print(global_kran.time)
         print("Zeit", b.text)
 
+    def S(s):
+        print(s.value)
+        global_kran.animationsgeschwindigkeit(s.value)
+
     button_liste.append(button(bind=B, text='Naechste Krananweisung'))
     button_liste.append(button(bind=C, text='Naechste Montageanweisung'))
     button_liste.append(button(bind=D, text='Alle Montageanweisungen'))
     button_liste.append(button(bind=E, text='Zeit'))
+    scene.append_to_caption('\n\n')
+    geschwindikeitsregler = slider(bind=S)
 
     einstellen_Bildwerte()
     #global_baustelle.speichere_Baustelle(baustelle)
