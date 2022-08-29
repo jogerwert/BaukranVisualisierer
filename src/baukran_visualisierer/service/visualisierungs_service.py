@@ -3,6 +3,7 @@ import src.grafischer_prototyp.GrafikObjekte
 import src.grafischer_prototyp.GrafikKran
 import src.baukran_visualisierer.model.baustelle
 from vpython import *
+import ctypes  # An included library with Python install.
 
 class virt_Baustelle:
     def __init__(self, baustelle):
@@ -18,6 +19,9 @@ global_baustelle = virt_Baustelle(None)
 global_kran = src.grafischer_prototyp.GrafikKran.GrafikKran()
 bauteil_liste = []
 button_liste = []
+
+def Mbox(title, text, style):
+    return ctypes.windll.user32.MessageBoxW(0, text, title, style)
 
 def visualisiere_baustelle(baustelle):
     # Visualisiert Grundbaustelle
@@ -39,10 +43,16 @@ def visualisiere_baustelle(baustelle):
         button_liste[2].disabled = False
         print("alle_montageanweisungen", b.text)
 
+    def E(b):
+        Mbox('Zeitberechnung', 'Für den Bauablauf sind ' + str(global_kran.time) + ' Sekunden vergangen', 1)
+
+        print(global_kran.time)
+        print("Zeit", b.text)
+
     button_liste.append(button(bind=B, text='Naechste Krananweisung'))
     button_liste.append(button(bind=C, text='Naechste Montageanweisung'))
     button_liste.append(button(bind=D, text='Alle Montageanweisungen'))
-
+    button_liste.append(button(bind=E, text='Zeit'))
 
     einstellen_Bildwerte()
     #global_baustelle.speichere_Baustelle(baustelle)

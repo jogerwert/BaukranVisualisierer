@@ -21,6 +21,7 @@ class GrafikKran:
         self.verbindunsseil = cylinder(pos=iv_verbindunsseil_position ,radius=0.01, axis=vector(0, 1, 0), length=0.01)
         self.laufkatze = box(pos=iv_laufkatze_position, length=iv_laenge, height=iv_hoehe, width=iv_breite, color=vector(0, 1, 0))
         self.greifarm = pyramid(pos=iv_greifarm_position, size=vector(0.5, 0.5, 0.5), axis=vector(0, 1, 0))
+        self.time = 0
 
     def veraendere_greifarm_hoehe(self, ev_richtung, ev_erhoehe, ev_objekt):
         iv_temp = iv_richtung = 0
@@ -44,6 +45,7 @@ class GrafikKran:
                 self.greifarm.pos.y = round(self.greifarm.pos.y, 0)
                 self.verbindunsseil.length = round(self.verbindunsseil.length, 0)
                 break
+        self.time = self.time + round(iv_temp,1)
         return "unlock"
 
     def erhalte_posistion_laufkatze(self):
@@ -152,6 +154,13 @@ class GrafikKran:
         print(i_winkel)
         print(x_erhoehung_hoehe)
         #print(hoehe)
+
+        if x_erhoehung == 1:
+            self.time = self.time + x_abstand_zwischen_zwei_puntken
+        elif i_winkel == 10:
+            self.time = self.time + winkel/10
+        elif x_erhoehung ==1:
+            self.time = self.time + hoehe
 
         while True:
             rate(10)
