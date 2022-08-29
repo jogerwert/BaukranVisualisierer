@@ -121,5 +121,5 @@ def visualisiere_hebe_um(hoehe, bauteil_name):
 
 def einstellen_Bildwerte():
     scene.background = color.white
-    scene.width = 1920
-    scene.height = 1080
+    scene.width = 640
+    scene.height = 480
