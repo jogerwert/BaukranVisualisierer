@@ -1,4 +1,4 @@
-from src.baukran_visualisierer.exceptions.bas_logic_error import BasLogicError
+from baukran_visualisierer.exceptions.bas_logic_error import BasLogicError
 
 
 class Bewegungsanweisung:

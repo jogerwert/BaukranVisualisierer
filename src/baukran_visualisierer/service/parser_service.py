@@ -1,13 +1,13 @@
-from src.baukran_visualisierer.model.anweisungen.bewegunsanweisung import Bewegungsanweisung
-from src.baukran_visualisierer.model.anweisungen.hakenhandlung import Hakenhandlung
-from src.baukran_visualisierer.model.anweisungen.montageanweisung import Montageanweisung
-from src.baukran_visualisierer.model.baufeld import Baufeld
-from src.baukran_visualisierer.model.baustelle import Baustelle
-from src.baukran_visualisierer.model.bauteil import Bauteil
-from src.baukran_visualisierer.model.gegenstand import Gegenstand
-from src.baukran_visualisierer.model.kran import Kran
+from baukran_visualisierer.model.anweisungen.bewegunsanweisung import Bewegungsanweisung
+from baukran_visualisierer.model.anweisungen.hakenhandlung import Hakenhandlung
+from baukran_visualisierer.model.anweisungen.montageanweisung import Montageanweisung
+from baukran_visualisierer.model.baufeld import Baufeld
+from baukran_visualisierer.model.baustelle import Baustelle
+from baukran_visualisierer.model.bauteil import Bauteil
+from baukran_visualisierer.model.gegenstand import Gegenstand
+from baukran_visualisierer.model.kran import Kran
 
-from src.baukran_visualisierer.datei_management import parser
+from baukran_visualisierer.datei_management import parser
 
 
 def parse_baustelle(eingabedatei):

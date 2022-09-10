@@ -1,4 +1,4 @@
-import src.baukran_visualisierer.service.parser_service as parser_service
+import baukran_visualisierer.service.parser_service as parser_service
 
 
 def parse_baustelle(eingabedatei):

@@ -1,7 +1,7 @@
-import src.grafischer_prototyp.GrafikBaufeld
-import src.grafischer_prototyp.GrafikObjekte
-import src.grafischer_prototyp.GrafikKran
-import src.baukran_visualisierer.model.baustelle
+import grafischer_prototyp.GrafikBaufeld
+import grafischer_prototyp.GrafikObjekte
+import grafischer_prototyp.GrafikKran
+import baukran_visualisierer.model.baustelle
 from vpython import *
 import ctypes  # An included library with Python install.
 
@@ -16,7 +16,7 @@ class virt_Baustelle:
         return self.baustelle
 
 global_baustelle = virt_Baustelle(None)
-global_kran = src.grafischer_prototyp.GrafikKran.GrafikKran()
+global_kran = grafischer_prototyp.GrafikKran.GrafikKran()
 bauteil_liste = []
 button_liste = []
 
@@ -64,17 +64,17 @@ def visualisiere_baustelle(baustelle):
     einstellen_Bildwerte()
     #global_baustelle.speichere_Baustelle(baustelle)
 
-    beispiel_baufeld = src.grafischer_prototyp.GrafikBaufeld.GrafikBaufeld()
+    beispiel_baufeld = grafischer_prototyp.GrafikBaufeld.GrafikBaufeld()
     beispiel_baufeld.erzeuge_baufeld(baustelle.baufeld.laenge_x, baustelle.baufeld.breite_y)
-    #beispiel_kran = src.grafischer_prototyp.GrafikKran.GrafikKran()
+    #beispiel_kran = grafischer_prototyp.GrafikKran.GrafikKran()
     global_kran.erzeuge_kran(baustelle.kran.position_x, baustelle.kran.position_y, baustelle.kran.hoehe,
                                baustelle.kran.ausladung)
     for bauteil in baustelle.bauteile:
-        temp_bauteil = src.grafischer_prototyp.GrafikObjekte.GrafikBauteil()
+        temp_bauteil = grafischer_prototyp.GrafikObjekte.GrafikBauteil()
         temp_bauteil.erzeuge_bauteil(bauteil.name,bauteil.position_x, bauteil.position_y, bauteil.position_z)
         bauteil_liste.append(temp_bauteil)
     for hindernisse in baustelle.gegenstaende:
-        temp_hindernisse = src.grafischer_prototyp.GrafikObjekte.GrafikHindernis()
+        temp_hindernisse = grafischer_prototyp.GrafikObjekte.GrafikHindernis()
         temp_hindernisse.erzeuge_hindernis(hindernisse.position_x, hindernisse.position_y, hindernisse.position_z)
 
     while True:
@@ -99,7 +99,7 @@ def visualisiere_bringe_an(winkel_vorher, winkel_nachher, haken_x, haken_y, hake
     #print("test")
     #print(winkel_vorher)
     #print(winkel_nachher)
-    pos = src.grafischer_prototyp.GrafikObjekte.GrafikPosition()
+    pos = grafischer_prototyp.GrafikObjekte.GrafikPosition()
     pos.erzeuge_position(haken_x, haken_y, haken_z)
     if winkel_nachher - winkel_vorher < 0:
         winkel = -1 * (winkel_nachher - winkel_vorher)

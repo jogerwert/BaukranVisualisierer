@@ -1,8 +1,8 @@
 import getopt
 import sys
 
-from src.baukran_visualisierer.datei_management import file_picker
-from src.baukran_visualisierer.service import visualisierungs_service, parser_service
+from baukran_visualisierer.datei_management import file_picker
+from baukran_visualisierer.service import visualisierungs_service, parser_service
 
 
 def parse_baustelle(dateipfad):

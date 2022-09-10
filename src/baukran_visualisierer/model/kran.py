@@ -1,8 +1,8 @@
 import math
 
-from src.baukran_visualisierer.exceptions.bas_logic_error import BasLogicError
-from src.baukran_visualisierer.model.bauteil import Bauteil
-from src.baukran_visualisierer.service import visualisierungs_service
+from baukran_visualisierer.exceptions.bas_logic_error import BasLogicError
+from baukran_visualisierer.model.bauteil import Bauteil
+from baukran_visualisierer.service import visualisierungs_service
 
 
 class Kran:

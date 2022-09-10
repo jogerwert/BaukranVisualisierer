@@ -1,4 +1,4 @@
-from src.baukran_visualisierer.exceptions.baustellen_fehler import BaustellenFehler
+from baukran_visualisierer.exceptions.baustellen_fehler import BaustellenFehler
 
 
 class BasLogicError(BaustellenFehler):
