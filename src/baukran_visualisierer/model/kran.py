@@ -2,7 +2,6 @@ import math
 
 from baukran_visualisierer.exceptions.bas_logic_error import BasLogicError
 from baukran_visualisierer.model.bauteil import Bauteil
-from baukran_visualisierer.service import visualisierungs_service
 
 
 class Kran:
@@ -29,6 +28,12 @@ class Kran:
         self.baustelle = None
         self.haken_bauteil = None
 
+        # Schnittstelle, um die Kranbewegungen modular zu visualisieren
+        self.visualisiere_greife = self._do_nothing
+        self.visualisiere_bringe_an = self._do_nothing
+        self.visualisiere_senke_um = self._do_nothing
+        self.visualisiere_hebe_um = self._do_nothing
+
     def greife(self):
         # TODO: Testen
 
@@ -53,7 +58,7 @@ class Kran:
         else:
             raise BasLogicError(f'An der Koordinate ({haken_x}, {haken_y}, {haken_z}) befindet sich kein Bauteil!')
 
-        #visualisierungs_service.visualisiere_greife(haken_z)
+        # self.visualisiere_greife(haken_z)
 
     def richte_aus(self):
         # TODO: Testen
@@ -127,7 +132,7 @@ class Kran:
         if self.haken_bauteil is not None:
             bauteil_name = self.haken_bauteil.name
 
-        visualisierungs_service.visualisiere_bringe_an(winkel_vorher, winkel_nachher, x, y, z, bauteil_name)
+        self.visualisiere_bringe_an(winkel_vorher, winkel_nachher, x, y, z, bauteil_name)
 
         return self.laufkatze_entfernung, self.winkel, self.haken_hoehe
 
@@ -146,7 +151,7 @@ class Kran:
         if self.haken_bauteil is not None:
             bauteil_name = self.haken_bauteil.name
 
-        visualisierungs_service.visualisiere_senke_um(hoehe, bauteil_name)
+        self.visualisiere_senke_um(hoehe, bauteil_name)
 
         return self.haken_hoehe
 
@@ -165,7 +170,7 @@ class Kran:
         if self.haken_bauteil is not None:
             bauteil_name = self.haken_bauteil.name
 
-        visualisierungs_service.visualisiere_hebe_um(hoehe, bauteil_name)
+        self.visualisiere_hebe_um(hoehe, bauteil_name)
 
         return self.haken_hoehe
 
@@ -207,3 +212,6 @@ class Kran:
         haken_hoehe = haken_z
 
         return laufkatze_entfernung, winkel, haken_hoehe
+
+    def _do_nothing(self, *args):
+        pass

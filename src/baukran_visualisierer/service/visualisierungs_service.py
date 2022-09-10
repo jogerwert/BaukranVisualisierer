@@ -20,8 +20,17 @@ global_kran = grafischer_prototyp.GrafikKran.GrafikKran()
 bauteil_liste = []
 button_liste = []
 
+
 def Mbox(title, text, style):
     return ctypes.windll.user32.MessageBoxW(0, text, title, style)
+
+
+def setze_visualisierungs_funktionen(baustelle):
+    baustelle.kran.visualisiere_greife = visualisiere_greife
+    baustelle.kran.visualisiere_bringe_an = visualisiere_bringe_an
+    baustelle.kran.visualisiere_senke_um = visualisiere_senke_um
+    baustelle.kran.visualisiere_hebe_um = visualisiere_hebe_um
+
 
 def visualisiere_baustelle(baustelle):
     # Visualisiert Grundbaustelle

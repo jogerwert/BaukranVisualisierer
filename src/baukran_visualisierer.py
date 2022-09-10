@@ -21,6 +21,7 @@ def start_cmd(eingabedatei):
 
 def start_visualisierung(eingabedatei):
     baustelle = parse_baustelle(eingabedatei)
+    visualisierungs_service.setze_visualisierungs_funktionen(baustelle)
     visualisierungs_service.visualisiere_baustelle(baustelle)
 
 
