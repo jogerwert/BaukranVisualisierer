@@ -204,7 +204,7 @@ class Kran:
 
         if laufkatze_entfernung > self.ausladung:
             raise BasLogicError(f'Das Bauteil an Position ({haken_x}, {haken_y}, {haken_z}) '
-                             f'liegt ausserhalb der Reichweite des Krans!')
+                                f'liegt ausserhalb der Reichweite des Krans!')
 
         # Berechnung: Winkel im Dreieck aus Hypotenuse und Ankathete
         winkel = math.degrees(math.acos(haken_x / laufkatze_entfernung))

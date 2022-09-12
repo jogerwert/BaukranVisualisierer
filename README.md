@@ -19,7 +19,7 @@ python -m venv venv
 
 *Durchführung im Verzeichnis **src***
 ```commandline
-..\venv\Scripts\python.exe -m baukran_visualisierer.py
+..\venv\Scripts\python.exe -m baukran_visualisierer.main
 ```
 
 #### Tests ausführen:
