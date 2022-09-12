@@ -14,7 +14,7 @@ class GrafikKran:
         iv_greifarm_position = vector(ev_x_wert+1, ev_hoehe_kran, ev_y_wert)
         iv_verbindunsseil_position = vector(ev_x_wert+1, ev_hoehe_kran+0.5, ev_y_wert)
 
-        box(pos=iv_turm_position)
+        self.fundament = box(pos=iv_turm_position)
         self.turm = cylinder(pos=iv_turm_position, radius=0.5, length=ev_hoehe_kran+1, axis=vector(0, 1, 0))
         self.ausleger = cylinder(pos=iv_ausleger_position, radius=0.5, length=ev_ausladung_kran, axis=vector(1, 0, 0))
         self.drehkranz = sphere(pos=iv_drehkranz_position, radius=0.5)
@@ -23,6 +23,19 @@ class GrafikKran:
         self.greifarm = pyramid(pos=iv_greifarm_position, size=vector(0.5, 0.5, 0.5), axis=vector(0, 1, 0))
         self.time = 0
         self.rate = 1
+        self.collision_error = []
+
+    def loesche_kran(self):
+        self.fundament.visible = False
+        self.turm.visible = False
+        self.ausleger.visible = False
+        self.drehkranz.visible = False
+        self.verbindunsseil.visible = False
+        self.laufkatze.visible = False
+        self.greifarm.visible = False
+
+    def get_collision(self):
+        return self.collision_error
 
     def animationsgeschwindigkeit(self, wert):
         self.rate = 1 + wert * 100
@@ -133,7 +146,8 @@ class GrafikKran:
             print("else")
         return iv_laufkatzenbewegung_pro_sekunde, iv_auslegerbewegung_pro_sekund, iv_greifarmbewegung_pro_sekunde
 
-    def test_func(self, winkel, aktueller_winkel_ausleger_anfang, objekt_pos, objekt_bauteil):
+    def test_func(self, winkel, aktueller_winkel_ausleger_anfang, objekt_pos, objekt_bauteil, hindernisse):
+        # func
         temp_punkt_2D = numpy.array([objekt_pos.erhalte_position().x, objekt_pos.erhalte_position().z])
 
         temp_objekt = grafischer_prototyp.GrafikObjekte.GrafikPosition()
@@ -144,11 +158,13 @@ class GrafikKran:
         x_abstand_zwischen_zwei_puntken = numpy.linalg.norm(temp_punkt_2D - temp_punkt_2D_nach_rotation)
         x_erhoehung, i_winkel, x_erhoehung_hoehe = self.berechne_bewegunszeit_laufkatze_ausleger(winkel,
                                                                             x_abstand_zwischen_zwei_puntken,objekt_pos)
+        # zusammenfassen + funktion
         bereits_gedreht = x_zahler = t_winkel = 0
         x_erhoehung = x_erhoehung/10
         i_winkel = i_winkel/10
         x_erhoehung_hoehe = x_erhoehung_hoehe/10
-        bereits_erhoeht = 0
+        bereits_erhoeht = coll_counter = 0
+        # variable umbenennen
         a = self.berechne_punkt_links_oder_rechts_gerade(objekt_pos ,aktueller_winkel_ausleger_anfang)
         if self.greifarm.pos.y < objekt_pos.erhalte_position().y:
             hoehe = objekt_pos.erhalte_position().y - self.greifarm.pos.y
@@ -159,6 +175,7 @@ class GrafikKran:
         print(x_erhoehung_hoehe)
         #print(hoehe)
 
+        # time func
         if x_erhoehung == 0.1:
             self.time = self.time + x_abstand_zwischen_zwei_puntken
         elif i_winkel == 1:
@@ -294,9 +311,26 @@ class GrafikKran:
                         objekt_bauteil.erhalte_position().x = temp_punkt_3D.erhalte_position().x
                         objekt_bauteil.erhalte_position().y = self.greifarm.pos.y#temp_punkt_3D.erhalte_position().y - 0.5
                         objekt_bauteil.erhalte_position().z = temp_punkt_3D.erhalte_position().z
+                        for element in hindernisse:
+                            temp_punkt_3D_1 = numpy.array(
+                                [objekt_bauteil.erhalte_position().x, objekt_bauteil.erhalte_position().z,
+                                 objekt_bauteil.erhalte_position().y])
+                            temp_punkt_3D_2 = numpy.array(
+                                [element.erhalte_position().x, element.erhalte_position().z,
+                                 element.erhalte_position().y])
+
+                            x_abstand_coll = numpy.linalg.norm(
+                                temp_punkt_3D_1 - temp_punkt_3D_2)
+                            if x_abstand_coll < 1:
+                                coll_counter += 1
+                                # self.collision_error.append("collision")
+                                pass
 
             else:
+                if coll_counter > 0:
+                    self.collision_error.append("collision")
                 break
         self.greifarm.pos.y = round(self.greifarm.pos.y,0)
         print(self.greifarm.pos)
-        return "unlock" #a*t_winkel + aktueller_winkel_ausleger_anfang
+        #return "unlock" #a*t_winkel + aktueller_winkel_ausleger_anfang
+        return a * t_winkel + aktueller_winkel_ausleger_anfang

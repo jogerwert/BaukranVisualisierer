@@ -290,20 +290,21 @@ def test_kran7():
     beispiel_bauteile.append(GrafikBauteil())
     beispiel_bauteile.append(GrafikBauteil())
     beispiel_bauteile.append(GrafikBauteil())
-    beispiel_bauteile[0].erzeuge_bauteil(0, 2, 0)
-    beispiel_bauteile[1].erzeuge_bauteil(1, 2, 0)
-    beispiel_bauteile[2].erzeuge_bauteil(2, 2, 0)
+    beispiel_bauteile[0].erzeuge_bauteil("a", 0, 2, 0)
+    beispiel_bauteile[1].erzeuge_bauteil("b", 1, 2, 0)
+    beispiel_bauteile[2].erzeuge_bauteil("c", 2, 2, 0)
     #beispiel_bauteile[3].erzeuge_bauteil(4, 4, 0)
 
     beispiel_kran = GrafikKran()
-    beispiel_kran.erzeuge_kran(0, 0, 5, 10)
+    beispiel_kran.erzeuge_kran(1, 1, 5, 10)
+    beispiel_kran.animationsgeschwindigkeit(1)
 
     #anweisung 1
     pos = GrafikPosition()
     pos.erzeuge_position(1, 2, 0)
     winkel = beispiel_kran.berechne_drehwinkel_objekt(pos)
     t_winkel = beispiel_kran.test_func(winkel, 0, pos, None)
-    beispiel_kran.veraendere_greifarm_hoehe("senke",4, None)
+    #beispiel_kran.veraendere_greifarm_hoehe("senke",4, None)
     beispiel_kran.veraendere_greifarm_hoehe("erhoehe",2, beispiel_bauteile[1])
     pos = GrafikPosition()
     pos.erzeuge_position(6, 2, 2)
@@ -363,22 +364,25 @@ def test_kran8():
     beispiel_baufeld.erzeuge_baufeld(10, 10)
 
     beispiel_kran = GrafikKran()
-    beispiel_kran.erzeuge_kran(0, 0, 5, 10)
+    beispiel_kran.erzeuge_kran(5, 5, 5, 10)
 
     beispiel_bauteile = []
     beispiel_bauteile.append(GrafikBauteil())
-    beispiel_bauteile[0].erzeuge_bauteil(2,2,0)
+    beispiel_bauteile[0].erzeuge_bauteil("a",2,2,0)
     pos = GrafikPosition()
     pos.erzeuge_position(2, 2, 0)
+    beispiel_kran.animationsgeschwindigkeit(1)
     winkel = beispiel_kran.berechne_drehwinkel_objekt(pos)
     t_winkel = beispiel_kran.test_func(winkel, 0, pos, None)
-    beispiel_kran.veraendere_greifarm_hoehe("senke", 4, None)
+    #beispiel_kran.veraendere_greifarm_hoehe("senke", 4, None)
     beispiel_kran.veraendere_greifarm_hoehe("erhoehe", 2, beispiel_bauteile[0])
     pos = GrafikPosition()
     pos.erzeuge_position(4, 4, 2)
     winkel = beispiel_kran.berechne_drehwinkel_objekt(pos)
     t_winkel = beispiel_kran.test_func(winkel, t_winkel, pos, beispiel_bauteile[0])
     beispiel_kran.veraendere_greifarm_hoehe("senke", 2, beispiel_bauteile[0])
+    while True:
+        pass
 
 scene.background = color.white
 scene.width = 1920
@@ -389,6 +393,3 @@ scene.height = 1080
 #test_hindernis()
 #sleep(3)
 test_kran8()
-while True:
-
-    pass

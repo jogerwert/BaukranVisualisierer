@@ -1,6 +1,9 @@
 from vpython import *
 
 class GrafikBaufeld:
+    def __init__(self):
+        self.liste = []
+
     def erzeuge_baufeld(self, eingabe_laenge_baufeld, eingabe_breite_baufeld):
         laenge_baufeldteil = breite_baufeldteil = 1
         hoehe_baufeldteil = 0.1
@@ -17,5 +20,15 @@ class GrafikBaufeld:
                     else:
                         color_baufeld = vector(0.8, 0.8, 0.8)
 
-                box(pos=vector(x, -0.5, y), length=laenge_baufeldteil, width=breite_baufeldteil, height=hoehe_baufeldteil,
-                    color=color_baufeld)
+                #box(pos=vector(x, -0.5, y), length=laenge_baufeldteil, width=breite_baufeldteil, height=hoehe_baufeldteil,
+                #    color=color_baufeld)
+
+                self.liste.append(box(pos=vector(x, -0.5, y), length=laenge_baufeldteil, width=breite_baufeldteil,
+                                      height=hoehe_baufeldteil,color=color_baufeld))
+
+    def erhalte_baufeld_liste(self):
+        return self.liste
+
+    def loesche_liste(self):
+        while len(self.liste) > 0:
+            self.liste.pop(0)
