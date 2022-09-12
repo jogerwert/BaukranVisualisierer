@@ -1,7 +1,7 @@
-from src.baukran_visualisierer.service import parser_service
+from tests.modellierungs_tests import beispiel_baustellen
 
 
 def test():
-    baustelle = parser_service.erstelle_beispiel_baustelle()
+    baustelle = beispiel_baustellen.erstelle_beispiel_baustelle()
     kran = baustelle.kran
     kran.bringe_an(1, 2, 3)

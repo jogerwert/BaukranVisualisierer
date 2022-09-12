@@ -196,6 +196,9 @@ class Kran:
     def berechne_hakenposition_aus_koordinaten(self, haken_x, haken_y, haken_z):
         # TODO: Testen
 
+        x_normiert = haken_x - self.position_x
+        y_normiert = haken_y - self.position_y
+
         # Berechnung: Abstand zwischen zwei Punkten, Rasterversatz kuerzt sich raus
         laufkatze_entfernung = math.sqrt(
             math.pow(self.position_x - haken_x, 2)
@@ -207,7 +210,10 @@ class Kran:
                                 f'liegt ausserhalb der Reichweite des Krans!')
 
         # Berechnung: Winkel im Dreieck aus Hypotenuse und Ankathete
-        winkel = math.degrees(math.acos(haken_x / laufkatze_entfernung))
+        winkel = math.degrees(math.acos(x_normiert / laufkatze_entfernung))
+
+        if y_normiert < 0:
+            winkel = 0 - winkel
 
         haken_hoehe = haken_z
 
