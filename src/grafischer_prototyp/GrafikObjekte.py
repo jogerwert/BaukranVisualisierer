@@ -9,12 +9,18 @@ class GrafikBauteil:
     def erhalte_position(self):
         return self.bauteil.pos
 
+    def erhalte_bauteil(self):
+        return self.bauteil
+
 class GrafikHindernis:
     def erzeuge_hindernis(self, eingabe_position_wert_x, eingabe_position_wert_y, eingabe_position_wert_z):
         bauteil_position = vector(eingabe_position_wert_x, eingabe_position_wert_z, eingabe_position_wert_y)
         self.hindernis = box(pos=bauteil_position, color=vector(1, 0, 1), opacity=0.8)
 
     def erhalte_position(self):
+        return self.hindernis.pos
+
+    def erhalte_hindernis(self):
         return self.hindernis
 
 class GrafikPosition:
