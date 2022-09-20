@@ -30,6 +30,8 @@ class Kran:
 
         # Schnittstelle, um die Kranbewegungen modular zu visualisieren
         self.visualisiere_greife = self._do_nothing
+        self.visualisiere_richte_aus = self._do_nothing
+        self.visualisiere_lasse_los = self._do_nothing
         self.visualisiere_bringe_an = self._do_nothing
         self.visualisiere_senke_um = self._do_nothing
         self.visualisiere_hebe_um = self._do_nothing
@@ -58,7 +60,7 @@ class Kran:
         else:
             raise BasLogicError(f'An der Koordinate ({haken_x}, {haken_y}, {haken_z}) befindet sich kein Bauteil!')
 
-        # self.visualisiere_greife(haken_z)
+        self.visualisiere_greife()
 
     def richte_aus(self):
         # TODO: Testen
@@ -68,6 +70,8 @@ class Kran:
 
         if self.haken_bauteil is None:
             raise BasLogicError("An dem Haken haengt kein Bauteil!")
+
+        self.visualisiere_richte_aus()
 
     def lasse_los(self):
         # TODO: Testen
@@ -96,6 +100,8 @@ class Kran:
 
         self.haken_bauteil = None
         self.baustelle.platziere_baustellenobjekt(bauteil)
+
+        self.visualisiere_lasse_los()
 
         return bauteil
 

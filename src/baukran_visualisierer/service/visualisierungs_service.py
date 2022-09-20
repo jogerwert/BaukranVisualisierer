@@ -56,7 +56,6 @@ loop = True
 
 
 def setze_visualisierungs_funktionen(baustelle):
-    baustelle.kran.visualisiere_greife = visualisiere_greife
     baustelle.kran.visualisiere_bringe_an = visualisiere_bringe_an
     baustelle.kran.visualisiere_senke_um = visualisiere_senke_um
     baustelle.kran.visualisiere_hebe_um = visualisiere_hebe_um
