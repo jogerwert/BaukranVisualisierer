@@ -1,14 +1,26 @@
+from typing import Callable
+
 from baukran_visualisierer.exceptions.bas_logic_error import BasLogicError
 
 
 class Bewegungsanweisung:
 
-    def __init__(self, kranfunktion, parameter):
+    def __init__(self, kranfunktion: Callable, parameter: int | tuple[int, int, int]) -> None:
+        """
+        Eine Anweisung fuer einen Baukran, die in einer Bewegung des Kranarms resultiert.
+
+        :param kranfunktion: Die Funktion des Krans, die ausgefuehrt wird
+        :param parameter: Die Parameter, mit denen die Kranfunktion ausgefuehrt wird
+        """
         self.kranfunktion = kranfunktion
         self.parameter = parameter
 
-    def ausfuehren(self):
+    def ausfuehren(self) -> None:
+        """
+        Fuehrt die Kranfunktion der Bewegungsanweisung mit den Parametern aus.
 
+        :return: None
+        """
         # Funktion ausfuehren, wenn Hoehe vorhanden
         if isinstance(self.parameter, int):
             self.kranfunktion(self.parameter)

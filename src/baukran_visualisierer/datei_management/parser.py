@@ -1,3 +1,6 @@
+import re
+from typing import TextIO
+
 from baukran_visualisierer.exceptions.bas_parser_error import BasParserError
 from baukran_visualisierer.model.anweisungen.bewegunsanweisung import Bewegungsanweisung
 from baukran_visualisierer.model.anweisungen.hakenhandlung import Hakenhandlung
@@ -10,8 +13,15 @@ from baukran_visualisierer.model.kran import Kran
 from baukran_visualisierer.datei_management import regulaere_ausdruecke
 
 
-def _parse_zeile(zeile, regex_dict):
-
+def _parse_zeile(zeile: str, regex_dict: dict) -> tuple[str, re.Match] | tuple[None, None]:
+    """
+    Ueberprueft eine Zeile auf das Vorkommen von regulaeren Ausdruecken.
+    
+    :param zeile: Die Zeile, die geparst werden soll.
+    :param regex_dict: Die regulaeren Ausdruecke, die ueberprueft werden sollen.
+    :return: Schluessel und Match des ersten gefunden regulaeren Ausdrucks oder None und None, falls kein regulaerer
+             Ausdruck gematcht werden konnte.
+    """
     for key, regex in regex_dict.items():
         match_regex = regex.match(zeile)
         if match_regex:
@@ -20,8 +30,13 @@ def _parse_zeile(zeile, regex_dict):
     return None, None
 
 
-def parse_baustelle(dateipfad):
-    baustelle = None
+def parse_baustelle(dateipfad: str) -> Baustelle:
+    """
+    Oeffnet die Datei zum gegebenen Dateipfad und parst aus der Datei ein Baustellen-Objekt.
+    
+    :param dateipfad: Der Dateipfad zur Datei.
+    :return: Das geparste Baustellenobjekt.
+    """
 
     with open(dateipfad, mode="r") as datei:
         baustelle = _parse_baustelle(datei)
@@ -29,10 +44,15 @@ def parse_baustelle(dateipfad):
     return baustelle
 
 
-def _parse_baustelle(datei):
+def _parse_baustelle(datei: TextIO) -> Baustelle:
+    """
+    Parst die erste gefundene Baustelle aus einer Datei.
+
+    :param datei: Die zu parsende Datei.
+    :return: Das Obekt der Baustelle.
+    """
     zeile = datei.readline()
 
-    baustelle = None
     while zeile:
         key, match_regex = _parse_zeile(zeile, regulaere_ausdruecke.baustelle_regex_dict)
 
@@ -60,7 +80,13 @@ def _parse_baustelle(datei):
         zeile = datei.readline()
 
 
-def _parse_komponenten(datei):
+def _parse_komponenten(datei: TextIO) -> tuple[Baufeld, Kran, list[Gegenstand], dict[Bauteil], list[Montageanweisung]]:
+    """
+    Parst die Komponenten fuer eine Baustelle.
+
+    :param datei: Die zu parsende Datei.
+    :return: Die Objekte fuer die Komponenten.
+    """
     baufeld = None
     kran = None
     gegenstaende = []
@@ -128,7 +154,14 @@ def _parse_komponenten(datei):
         zeile = datei.readline()
 
 
-def _parse_krananweisungen(datei, kran):
+def _parse_krananweisungen(datei: TextIO, kran: Kran) -> list[Hakenhandlung | Bewegungsanweisung]:
+    """
+    Parst die Krananweisungen, also Hakenhandlungen oder Bewegungsanweisungen, aus einer Datei.
+
+    :param datei: Die zu parsende Datei.
+    :param kran: Der Kran, zu dem die Anweisungen gehoeren.
+    :return: Die Krananweisungen.
+    """
     krananweisungen = []
 
     zeile = datei.readline()
@@ -182,7 +215,13 @@ def _parse_krananweisungen(datei, kran):
         zeile = datei.readline()
 
 
-def _parse_kommentar(datei):
+def _parse_kommentar(datei: TextIO) -> None:
+    """
+    Parst so lange durch Zeilen, bis das Ende des Kommentars gefunden wurde.
+
+    :param datei: Die zu parsende Datei.
+    :return: None
+    """
     zeile = datei.readline()
 
     while zeile:

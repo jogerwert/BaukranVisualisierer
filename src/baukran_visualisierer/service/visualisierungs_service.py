@@ -1,7 +1,7 @@
 import grafischer_prototyp.GrafikBaufeld
 import grafischer_prototyp.GrafikObjekte
 import grafischer_prototyp.GrafikKran
-import baukran_visualisierer.model.baustelle
+from baukran_visualisierer.model.baustelle import Baustelle
 from vpython import *
 import ctypes  # An included library with Python install.
 import sys
@@ -55,7 +55,12 @@ loop = True
 #    return ctypes.windll.user32.MessageBoxW(0, text, title, style)
 
 
-def setze_visualisierungs_funktionen(baustelle):
+def setze_visualisierungs_funktionen(baustelle: Baustelle) -> None:
+    """
+    Die Visualisierungs-Funktionen werden dem Kran des Modells hinzugefuegt.
+
+    :param baustelle: Die Baustelle, zu deren Kran die Visualisierung hinzugefuegt wird
+    """
     baustelle.kran.visualisiere_greife = visualisiere_greife
     baustelle.kran.visualisiere_richte_aus = visualisiere_richte_aus
     baustelle.kran.visualisiere_lasse_los = visualisiere_lasse_los

@@ -1,10 +1,13 @@
 from tkinter import Tk
-from tkinter import ttk
 from tkinter.filedialog import askopenfilename
-from tkinter.messagebox import showinfo
 
 
-def file_picker():
+def file_picker() -> str:
+    """
+    Oeffnet einen tkinter Dateiauswahldialog und gibt den Dateinamen zurueck.
+
+    :return: Der Dateiname der ausgewaehlten Datei.
+    """
     root = Tk()
     root.title('Baukran Visualisierer')
     root.resizable(False, False)
