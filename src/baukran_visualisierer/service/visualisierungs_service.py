@@ -56,6 +56,9 @@ loop = True
 
 
 def setze_visualisierungs_funktionen(baustelle):
+    baustelle.kran.visualisiere_greife = visualisiere_greife
+    baustelle.kran.visualisiere_richte_aus = visualisiere_richte_aus
+    baustelle.kran.visualisiere_lasse_los = visualisiere_lasse_los
     baustelle.kran.visualisiere_bringe_an = visualisiere_bringe_an
     baustelle.kran.visualisiere_senke_um = visualisiere_senke_um
     baustelle.kran.visualisiere_hebe_um = visualisiere_hebe_um
@@ -216,12 +219,18 @@ def anordnen_buttons():
     button_liste.append(button(bind=G, text='Kollision'))
     scene.append_to_caption('\n\n')
 
-def visualisiere_greife(haken_z):
-    print(global_baustelle.erhalte_Baustelle())
-    hoehe = global_kran.greifarm.pos.y - haken_z
-    print(haken_z)
-    print(global_kran.greifarm.pos.y)
-    global_kran.veraendere_greifarm_hoehe("senke", hoehe, None)
+
+def visualisiere_greife():
+    pass
+
+
+def visualisiere_richte_aus():
+    pass
+
+
+def visualisiere_lasse_los():
+    pass
+
 
 def visualisiere_bringe_an(winkel_vorher, winkel_nachher, haken_x, haken_y, haken_z, bauteil_name):
     #print("test")
@@ -261,6 +270,7 @@ def visualisiere_hebe_um(hoehe, bauteil_name):
             if bauteil.name == bauteil_name:
                 Objekt = bauteil
     global_kran.veraendere_greifarm_hoehe("erhoehe", hoehe, Objekt)
+
 
 def einstellen_Bildwerte():
     scene.background = color.white
