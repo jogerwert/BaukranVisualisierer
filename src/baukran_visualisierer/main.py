@@ -15,10 +15,6 @@ def start_file_picker():
     start_visualisierung(dateiname)
 
 
-def start_cmd(eingabedatei):
-    baustelle = parse_baustelle(eingabedatei)
-
-
 def start_visualisierung(eingabedatei):
     baustelle = parse_baustelle(eingabedatei)
     visualisierungs_service.setze_visualisierungs_funktionen(baustelle)
@@ -26,8 +22,6 @@ def start_visualisierung(eingabedatei):
 
 
 def main(argv):
-    eingabedatei = ''
-
     try:
         opts, args = getopt.getopt(argv, "hi:", ["input="])
     except getopt.GetoptError:

@@ -1,4 +1,5 @@
 import math
+from typing import Any
 
 from baukran_visualisierer.exceptions.bas_logic_error import BasLogicError
 from baukran_visualisierer.model.bauteil import Bauteil
@@ -6,7 +7,17 @@ from baukran_visualisierer.model.bauteil import Bauteil
 
 class Kran:
 
-    def __init__(self, position_x, position_y, hoehe, ausladung):
+    def __init__(self, position_x: int, position_y: int, hoehe: int, ausladung: int) -> None:
+        """
+        Klasse fuer den Kran der Baustelle.
+        Der Kran bewegt die Bauteile an die vorgesehenen Koordinaten.
+        Dazu wird dieser mithilfe von Anweisungen, die die Funktionen des Krans aufrufen, gesteuert.
+
+        :param position_x: Koordinate x
+        :param position_y: Koordinate y
+        :param hoehe: Hoehe des Krans
+        :param ausladung: Reichweite des Auslegers des Krans
+        """
         self.position_x = position_x
         self.position_y = position_y
         self.position_z = 0
@@ -20,6 +31,7 @@ class Kran:
         self.laufkatze_entfernung = 1
 
         # Ausleger zeigt in Richtung x-Achse
+        # Die Angabe des Winkels ist immer relativ zur Ausgangsposition
         self.winkel = 0
 
         # Kran steht in der Mitte des Kaestchens, nicht auf der Ecke
@@ -36,9 +48,11 @@ class Kran:
         self.visualisiere_senke_um = self._do_nothing
         self.visualisiere_hebe_um = self._do_nothing
 
-    def greife(self):
-        # TODO: Testen
-
+    def greife(self) -> None:
+        """
+        Der Kran greift den Inhalt der aktuellen Koordinate.
+        Wenn der Inhalt ein Bauteil ist, wird dieses aus dem Baufeld entfernt und im Kran gespeichert.
+        """
         if self.baustelle is None:
             raise BasLogicError("Kran wurde keiner Baustelle zugewiesen!")
 
@@ -62,9 +76,12 @@ class Kran:
 
         self.visualisiere_greife()
 
-    def richte_aus(self):
-        # TODO: Testen
-
+    def richte_aus(self) -> None:
+        """
+        Das Bauteil, das am Haken haengt, wird ausgerichtet.
+        Diese Funktion wird hauptsaechlich dazu verwendet, dass Bauteil in seine endgueltige Ausrichtung vor
+        der Platzierung zu drehen.
+        """
         if self.baustelle is None:
             raise BasLogicError("Kran wurde keiner Baustelle zugewiesen!")
 
@@ -73,9 +90,14 @@ class Kran:
 
         self.visualisiere_richte_aus()
 
-    def lasse_los(self):
-        # TODO: Testen
+    def lasse_los(self) -> Bauteil:
+        """
+        Der Haken laesst das gegriffene Bauteil los.
+        Wenn am Haken ein Bauteil haengt und die Koordinate frei ist, wird das Bauteil vom Haken entfernt und
+        im Baufeld platziert.
 
+        :return: Das losgelassene Bauteil
+        """
         if self.baustelle is None:
             raise BasLogicError("Kran wurde keiner Baustelle zugewiesen!")
 
@@ -105,9 +127,16 @@ class Kran:
 
         return bauteil
 
-    def bringe_an(self, x, y, z=None):
-        # TODO: Testen
+    def bringe_an(self, x: int, y: int, z: int = None) -> tuple[float, float, float]:
+        """
+        Der Haken des Krans wird auf direktem Weg an die gegebene Koordinate bewegt.
+        Falls keine z-Koordinate uebergeben wird, bleibt der Haken auf der gleichen Hoehe.
 
+        :param x: Koordinate x
+        :param y: Koordinate y
+        :param z: Koordinate z
+        :return: Die Entfernung der Laufkatze vom Mast, der Winkel relativ zum Ausgangswinkel und die Hoehe des Hakens
+        """
         if x == self.position_x and y == self.position_y:
             raise BasLogicError(f'Bauteile koennen nicht auf der Position des Krans platziert werden!')
 
@@ -142,9 +171,13 @@ class Kran:
 
         return self.laufkatze_entfernung, self.winkel, self.haken_hoehe
 
-    def senke_um(self, hoehe):
-        # TODO: Testen
+    def senke_um(self, hoehe: int) -> float:
+        """
+        Der Haken wird um eine relative Hoehenangabe gesenkt.
 
+        :param hoehe: Die Anzahl an Einheiten, um die der Haken gesenkt wird
+        :return: Die aktualisierte Hoehe des Hakens
+        """
         if hoehe <= 0:
             raise BasLogicError(f'Hoehe muss positiv sein!')
 
@@ -161,9 +194,13 @@ class Kran:
 
         return self.haken_hoehe
 
-    def hebe_um(self, hoehe):
-        # TODO: Testen
+    def hebe_um(self, hoehe: int) -> float:
+        """
+        Der Haken wird um eine relative Hoehenangabe gehoben.
 
+        :param hoehe: Die Anzahl an Einheiten, um die der Haken gehoben wird
+        :return: Die aktualisierte Hoehe des Hakens
+        """
         if hoehe <= 0:
             raise BasLogicError(f'Hoehe muss positiv sein!')
 
@@ -180,9 +217,16 @@ class Kran:
 
         return self.haken_hoehe
 
-    def berechne_koordinaten_aus_kranposition(self, laufkatze_entfernung, winkel, haken_hoehe):
-        # TODO: Testen
+    def berechne_koordinaten_aus_kranposition(self, laufkatze_entfernung: float, winkel: float,
+                                              haken_hoehe: float) -> tuple[int, int, int]:
+        """
+        Die Position des Hakens im Koordinatensystem wird aus der Ausrichtung des Krans berechnet.
 
+        :param laufkatze_entfernung: Die Entfernung der Laufkatze vom Kranmast
+        :param winkel: Der Winkel des Krans relativ zum Ausgangswinkel
+        :param haken_hoehe: Die Hoehe des Hakens
+        :return:
+        """
         # Berechnung: Ankathete im Dreieck aus Winkel und Hypotenuse + Versatz
         haken_x = math.floor(
             self.position_x + self.raster_versatz
@@ -199,9 +243,17 @@ class Kran:
 
         return haken_x, haken_y, haken_z
 
-    def berechne_hakenposition_aus_koordinaten(self, haken_x, haken_y, haken_z):
-        # TODO: Testen
+    def berechne_hakenposition_aus_koordinaten(self, haken_x: int, haken_y: int,
+                                               haken_z: int) -> tuple[float, float, float]:
+        """
+        Die Ausrichtung die der Kran annehmen muss, um den Haken an einen bestimmten Punkt im Koordinatensystem
+        zu bringen, wird berechnet.
 
+        :param haken_x: Koordinate x
+        :param haken_y: Koordinate y
+        :param haken_z: Koordinate z
+        :return: Die Entfernung der Laufkatze vom Mast, der Winkel relativ zum Ausgangswinkel und die Hoehe des Hakens
+        """
         x_normiert = haken_x - self.position_x
         y_normiert = haken_y - self.position_y
 
@@ -225,5 +277,11 @@ class Kran:
 
         return laufkatze_entfernung, winkel, haken_hoehe
 
-    def _do_nothing(self, *args):
+    def _do_nothing(self, *args: Any) -> None:
+        """
+        Platzhalter-Funktion für den Fall, dass keine Visualisierung des Krans benoetigt wird.
+        Diese Funktion tut nichts.
+
+        :param args: Beliebige Parameter, die ignoriert werden
+        """
         pass
