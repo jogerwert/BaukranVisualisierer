@@ -176,7 +176,7 @@ def visualisiere_bringe_an(winkel_vorher, winkel_nachher, haken_x, haken_y, hake
             if bauteil.name == bauteil_name:
                 Objekt = bauteil
 
-    global_kran.test_func(winkel, winkel_vorher, pos, Objekt, hindernis_liste)
+    global_kran.bringe_an(winkel, winkel_vorher, pos, Objekt, hindernis_liste)
 
 def visualisiere_senke_um(hoehe, bauteil_name):
     Objekt = None

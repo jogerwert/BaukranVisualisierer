@@ -217,7 +217,7 @@ class GrafikKran:
             iv_greifarmbewegung_pro_sekunde = 1
         return iv_laufkatzenbewegung_pro_sekunde, iv_auslegerbewegung_pro_sekund, iv_greifarmbewegung_pro_sekunde
 
-    def test_func(self, winkel, aktueller_winkel_ausleger_anfang, objekt_pos, objekt_bauteil, hindernisse):
+    def bringe_an(self, winkel, aktueller_winkel_ausleger_anfang, objekt_pos, objekt_bauteil, hindernisse):
         """
             Notes:
             Diese Funktion bewegt Laufkatze, Greifarm und Ausleger. Hier wird auch geprüft, obe diese Funktion
