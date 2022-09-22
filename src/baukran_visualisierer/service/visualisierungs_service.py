@@ -149,38 +149,7 @@ def erzeuge_menu_elemente():
         button_liste.append(button(bind=button_kollision, text='Kollision'))
         scene.append_to_caption('\n\n')
 
-    def M(m):
-        print(m.selected, m.index)
-
-    def G(m):
-        for element in global_kran.get_collision():
-            print(element)
-        # button_liste[6].color = vector(1,1,1)
-
-    button_liste.append(button(bind=B, text='Naechste Krananweisung'))
-    button_liste.append(button(bind=C, text='Naechste Montageanweisung'))
-    button_liste.append(button(bind=D, text='Alle Montageanweisungen'))
-    button_liste.append(button(bind=E, text='Zeit'))
-    scene.append_to_caption('\n\n')
-    slider_liste.append(slider(bind=S))
-    # winput(bind=T, text="mi")
-    # menu(choices=['cat', 'dog', 'horse'], bind=M)
-    scene.append_to_caption('\n\n')
-    button_liste.append(button(bind=F, text='Neues Bauprojekt'))
-    button_liste.append(button(bind=G, text='Kollision'))
-    scene.append_to_caption('\n\n')
-
-
-def visualisiere_greife():
-    pass
-
-
-def visualisiere_richte_aus():
-    pass
-
-
-def visualisiere_lasse_los():
-    pass
+    erzeuge_elemente()
 
 def visualisiere_bringe_an(winkel_vorher, winkel_nachher, haken_x, haken_y, haken_z, bauteil_name):
     pos = grafischer_prototyp.GrafikObjekte.GrafikPosition()
@@ -223,7 +192,7 @@ def visualisiere_richte_aus():
 
 def visualisiere_lasse_los():
     global_kran.lasse_los()
-    
+
 def einstellen_Bildwerte():
     scene.background = color.white
     scene.width = 640
