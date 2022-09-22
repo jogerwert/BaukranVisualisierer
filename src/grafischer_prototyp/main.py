@@ -3,6 +3,12 @@ from GrafikKran import *
 from GrafikObjekte import *
 from GrafikBaufeld import *
 
+"""
+Diese main wurde für Standalone Version der grafischen Darstellung und Animation benutzt sowie zum Testen. 
+Die Animationen  funktionieren nicht mehr, da die Klassen mit den Animationen sich dem Model Klasse angepasst haben. 
+Auf https://github.com/jogerwert/BaukranVisualisierer ist eine frühere Version welche als Standalone funktioneiert. 
+"""
+
 def test_baufeld():
     baufeld = GrafikBaufeld()
     baufeld.erzeuge_baufeld(10, 10)
