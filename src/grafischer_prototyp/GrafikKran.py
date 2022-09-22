@@ -4,6 +4,7 @@ from math import *
 #from GrafikObjekte import *
 import grafischer_prototyp.GrafikObjekte
 
+
 class GrafikKran:
     def erzeuge_kran(self, ev_x_wert, ev_y_wert, ev_hoehe_kran, ev_ausladung_kran):
         iv_laenge = iv_breite = iv_hoehe = 0.5
@@ -18,8 +19,9 @@ class GrafikKran:
         self.turm = cylinder(pos=iv_turm_position, radius=0.5, length=ev_hoehe_kran+1, axis=vector(0, 1, 0))
         self.ausleger = cylinder(pos=iv_ausleger_position, radius=0.5, length=ev_ausladung_kran, axis=vector(1, 0, 0))
         self.drehkranz = sphere(pos=iv_drehkranz_position, radius=0.5)
-        self.verbindunsseil = cylinder(pos=iv_verbindunsseil_position ,radius=0.01, axis=vector(0, 1, 0), length=0.01)
-        self.laufkatze = box(pos=iv_laufkatze_position, length=iv_laenge, height=iv_hoehe, width=iv_breite, color=vector(0, 1, 0))
+        self.verbindunsseil = cylinder(pos=iv_verbindunsseil_position,radius=0.01, axis=vector(0, 1, 0), length=0.01)
+        self.laufkatze = box(pos=iv_laufkatze_position, length=iv_laenge, height=iv_hoehe, width=iv_breite,
+                             color=vector(0, 1, 0))
         self.greifarm = pyramid(pos=iv_greifarm_position, size=vector(0.5, 0.5, 0.5), axis=vector(0, 1, 0))
         self.time = 0
         self.rate = 1
@@ -39,6 +41,15 @@ class GrafikKran:
 
     def animationsgeschwindigkeit(self, wert):
         self.rate = 1 + wert * 100
+
+    def greife(self):
+        self.time = self.time + 1
+
+    def richte_aus(self):
+        self.time = self.time + 1
+
+    def lasse_los(self):
+        self.time = self.time + 1
 
     def veraendere_greifarm_hoehe(self, ev_richtung, ev_erhoehe, ev_objekt):
         iv_temp = iv_richtung = 0
@@ -63,7 +74,6 @@ class GrafikKran:
                 self.verbindunsseil.length = round(self.verbindunsseil.length, 0)
                 break
         self.time = self.time + round(iv_temp,1)
-        return "unlock"
 
     def erhalte_posistion_laufkatze(self):
         return self.laufkatze.pos
@@ -127,210 +137,366 @@ class GrafikKran:
             iv_greifarmzeit = position.erhalte_position().y - self.greifarm.pos.y
         else:
             iv_greifarmzeit = self.greifarm.pos.y - position.erhalte_position().y
-        #iv_greifarmzeit = ev_hoehe
-        print(iv_greifarmzeit)
         if iv_laufkatzenzeit < iv_auslegerzeit and iv_greifarmzeit < iv_auslegerzeit:
             iv_laufkatzenbewegung_pro_sekunde = 1 * iv_laufkatzenzeit / iv_auslegerzeit
             iv_greifarmbewegung_pro_sekunde = 1 * iv_greifarmzeit / iv_auslegerzeit
             iv_auslegerbewegung_pro_sekund = 10
-            print("if")
         elif iv_auslegerzeit < iv_laufkatzenzeit and iv_greifarmzeit < iv_laufkatzenzeit:
             iv_laufkatzenbewegung_pro_sekunde = 1
             iv_auslegerbewegung_pro_sekund = 10 * iv_auslegerzeit / iv_laufkatzenzeit
             iv_greifarmbewegung_pro_sekunde = 1 * iv_greifarmzeit / iv_laufkatzenzeit
-            print("elif")
         else:
             iv_laufkatzenbewegung_pro_sekunde = 1 * iv_laufkatzenzeit / iv_greifarmzeit
             iv_auslegerbewegung_pro_sekund = 10 * iv_auslegerzeit / iv_greifarmzeit
             iv_greifarmbewegung_pro_sekunde = 1
-            print("else")
         return iv_laufkatzenbewegung_pro_sekunde, iv_auslegerbewegung_pro_sekund, iv_greifarmbewegung_pro_sekunde
 
     def test_func(self, winkel, aktueller_winkel_ausleger_anfang, objekt_pos, objekt_bauteil, hindernisse):
-        # func
-        temp_punkt_2D = numpy.array([objekt_pos.erhalte_position().x, objekt_pos.erhalte_position().z])
-
-        temp_objekt = grafischer_prototyp.GrafikObjekte.GrafikPosition()
-        temp_objekt.erzeuge_position(self.laufkatze.pos.x, self.laufkatze.pos.z, self.laufkatze.pos.y)
-        temp_punkt_3D = self.berechne_punkt_kreisgleichung_abhaengig_winkel(winkel, None, temp_objekt)
-        temp_punkt_2D_nach_rotation = numpy.array([temp_punkt_3D.erhalte_position().x, temp_punkt_3D.erhalte_position().z])
-
-        x_abstand_zwischen_zwei_puntken = numpy.linalg.norm(temp_punkt_2D - temp_punkt_2D_nach_rotation)
-        x_erhoehung, i_winkel, x_erhoehung_hoehe = self.berechne_bewegunszeit_laufkatze_ausleger(winkel,
-                                                                            x_abstand_zwischen_zwei_puntken,objekt_pos)
-        # zusammenfassen + funktion
-        bereits_gedreht = x_zahler = t_winkel = 0
-        x_erhoehung = x_erhoehung/10
-        i_winkel = i_winkel/10
-        x_erhoehung_hoehe = x_erhoehung_hoehe/10
-        bereits_erhoeht = coll_counter = 0
-        # variable umbenennen
-        a = self.berechne_punkt_links_oder_rechts_gerade(objekt_pos ,aktueller_winkel_ausleger_anfang)
-        if self.greifarm.pos.y < objekt_pos.erhalte_position().y:
-            hoehe = objekt_pos.erhalte_position().y - self.greifarm.pos.y
-        else:
-            hoehe = self.greifarm.pos.y - objekt_pos.erhalte_position().y
-        print(x_erhoehung)
-        print(i_winkel)
-        print(x_erhoehung_hoehe)
-        #print(hoehe)
-
-        # time func
-        if x_erhoehung == 0.1:
-            self.time = self.time + x_abstand_zwischen_zwei_puntken
-        elif i_winkel == 1:
-            self.time = self.time + winkel/10
-        elif x_erhoehung_hoehe == 0.1:
-            self.time = self.time + hoehe
-
-        while True:
-            rate(self.rate)
-            if winkel == 0:
-                print(winkel == 0)
-                while True:
-                    if x_zahler < x_abstand_zwischen_zwei_puntken:
-                        x_zahler += x_erhoehung
-                        b = 1
-                        temp_objekt = grafischer_prototyp.GrafikObjekte.GrafikPosition()
-                        temp_objekt.erzeuge_position(self.laufkatze.pos.x,
-                                                     self.laufkatze.pos.z,
-                                                     self.laufkatze.pos.y)
-                        temp_punkt_2D0 = numpy.array([objekt_pos.erhalte_position().x, objekt_pos.erhalte_position().z])
-                        temp_punkt_2D1 = numpy.array([self.laufkatze.pos.x, self.laufkatze.pos.z])
-                        temp_punkt_2D2 = numpy.array([self.turm.pos.x,self.turm.pos.z])
-                        x_abstand_1 = numpy.linalg.norm(temp_punkt_2D0 - temp_punkt_2D2)
-                        x_abstand_2 = numpy.linalg.norm(temp_punkt_2D1 - temp_punkt_2D2)
-                        if x_zahler > x_abstand_zwischen_zwei_puntken:
-                            x_erhoehung = x_abstand_1-x_abstand_2 #x_abstand_zwischen_zwei_puntken - x_zahler - x_erhoehung#
-                            if x_erhoehung < 0:
-                                x_erhoehung = -1*x_erhoehung
-                        if x_abstand_2 < x_abstand_1:
-                            temp_punkt_3D = self.berechne_punkt_kreisgleichung_abhaengig_winkel(aktueller_winkel_ausleger_anfang + a*t_winkel, x_erhoehung*b, temp_objekt)
-                        elif x_abstand_2 > x_abstand_1:
-                            temp_punkt_3D = self.berechne_punkt_kreisgleichung_abhaengig_winkel(aktueller_winkel_ausleger_anfang + a*t_winkel, -1*x_erhoehung*b,
-                                                                                                temp_objekt)
-                        self.laufkatze.pos.x = temp_punkt_3D.erhalte_position().x
-                        self.laufkatze.pos.z = temp_punkt_3D.erhalte_position().z
-                        self.greifarm.pos.x = temp_punkt_3D.erhalte_position().x
-                        self.greifarm.pos.z = temp_punkt_3D.erhalte_position().z
-                        self.verbindunsseil.pos.x = temp_punkt_3D.erhalte_position().x
-                        self.verbindunsseil.pos.z = temp_punkt_3D.erhalte_position().z
-                        #self.greifarm.pos.y = self.laufkatze.pos.y - 0.5
-                        if objekt_bauteil is not None:
-                            objekt_bauteil.erhalte_position().x = temp_punkt_3D.erhalte_position().x
-                            objekt_bauteil.erhalte_position().y = self.greifarm.pos.y#temp_punkt_3D.erhalte_position().y - 0.5
-                            objekt_bauteil.erhalte_position().z = temp_punkt_3D.erhalte_position().z
-                    else:
-                        break
-                break
-
+        def ab(bereits_erhoeht,x_erhoehung_hoehe,hoehe):
+            t_x_erhoehung_hoehe = x_erhoehung_hoehe
+            t_bereits_erhoeht = bereits_erhoeht
             if bereits_erhoeht < hoehe:
-                bereits_erhoeht = bereits_erhoeht + x_erhoehung_hoehe
-                if bereits_erhoeht > hoehe:
-                    x_erhoehung_hoehe = hoehe - (bereits_erhoeht - x_erhoehung_hoehe)
+                t_bereits_erhoeht = bereits_erhoeht + x_erhoehung_hoehe
+                if t_bereits_erhoeht > hoehe:
+                    t_x_erhoehung_hoehe = hoehe - (t_bereits_erhoeht - x_erhoehung_hoehe)
 
                 if objekt_pos.erhalte_position().y < self.greifarm.pos.y:
-                    self.greifarm.pos.y = self.greifarm.pos.y - x_erhoehung_hoehe  # round(self.greifarm.pos.y - x_erhoehung_hoehe, 1)
-                    print(self.greifarm.pos.y)
+                    self.greifarm.pos.y = self.greifarm.pos.y - t_x_erhoehung_hoehe
                     self.verbindunsseil.pos = self.greifarm.pos
                     self.verbindunsseil.pos.y = self.verbindunsseil.pos.y + 0.5
-                    self.verbindunsseil.length = self.verbindunsseil.length + x_erhoehung_hoehe  # round(self.verbindunsseil.length + x_erhoehung_hoehe, 1)
+                    self.verbindunsseil.length = self.verbindunsseil.length + t_x_erhoehung_hoehe
                 elif self.greifarm.pos.y < objekt_pos.erhalte_position().y:
-                    self.greifarm.pos.y = self.greifarm.pos.y + x_erhoehung_hoehe  # round(self.greifarm.pos.y + x_erhoehung_hoehe, 1)
-                    print(self.greifarm.pos.y)
+                    self.greifarm.pos.y = self.greifarm.pos.y + t_x_erhoehung_hoehe
                     self.verbindunsseil.pos = self.greifarm.pos
                     self.verbindunsseil.pos.y = self.verbindunsseil.pos.y + 0.5
-                    self.verbindunsseil.length = self.verbindunsseil.length - x_erhoehung_hoehe  # round(self.verbindunsseil.length - x_erhoehung_hoehe, 1)
-            #else:
-            #    break
+                    self.verbindunsseil.length = self.verbindunsseil.length - t_x_erhoehung_hoehe
+            return t_bereits_erhoeht
 
+        def ac(x_zahler, x_abstand_zwischen_zwei_puntken, x_erhoehung, coll_counter):
+            t_x_zahler = x_zahler
+            t_coll_counter = coll_counter
+            if x_zahler < x_abstand_zwischen_zwei_puntken:
+                t_x_zahler += x_erhoehung
+                b = 1
+                temp_objekt = grafischer_prototyp.GrafikObjekte.GrafikPosition()
+                temp_objekt.erzeuge_position(self.laufkatze.pos.x,
+                                             self.laufkatze.pos.z,
+                                             self.laufkatze.pos.y)
+                temp_punkt_2D0 = numpy.array([objekt_pos.erhalte_position().x, objekt_pos.erhalte_position().z])
+                temp_punkt_2D1 = numpy.array([self.laufkatze.pos.x, self.laufkatze.pos.z])
+                temp_punkt_2D2 = numpy.array([self.turm.pos.x, self.turm.pos.z])
+                x_abstand_1 = numpy.linalg.norm(temp_punkt_2D0 - temp_punkt_2D2)
+                x_abstand_2 = numpy.linalg.norm(temp_punkt_2D1 - temp_punkt_2D2)
+                if t_x_zahler > x_abstand_zwischen_zwei_puntken:
+                    x_erhoehung = x_abstand_1 - x_abstand_2
+                    if x_erhoehung < 0:
+                        x_erhoehung = -1 * x_erhoehung
+                if x_abstand_2 < x_abstand_1:
+                    temp_punkt_3D = self.berechne_punkt_kreisgleichung_abhaengig_winkel(
+                        aktueller_winkel_ausleger_anfang + a * t_winkel, x_erhoehung * b, temp_objekt)
+                elif x_abstand_2 > x_abstand_1:
+                    temp_punkt_3D = self.berechne_punkt_kreisgleichung_abhaengig_winkel(
+                        aktueller_winkel_ausleger_anfang + a * t_winkel, -1 * x_erhoehung * b,
+                        temp_objekt)
+                self.laufkatze.pos.x = temp_punkt_3D.erhalte_position().x
+                self.laufkatze.pos.z = temp_punkt_3D.erhalte_position().z
+                self.greifarm.pos.x = temp_punkt_3D.erhalte_position().x
+                self.greifarm.pos.z = temp_punkt_3D.erhalte_position().z
+                self.verbindunsseil.pos.x = temp_punkt_3D.erhalte_position().x
+                self.verbindunsseil.pos.z = temp_punkt_3D.erhalte_position().z
+
+                if objekt_bauteil is not None:
+                    objekt_bauteil.erhalte_position().x = temp_punkt_3D.erhalte_position().x
+                    objekt_bauteil.erhalte_position().y = self.greifarm.pos.y
+                    objekt_bauteil.erhalte_position().z = temp_punkt_3D.erhalte_position().z
+                    for element in hindernisse:
+                        temp_punkt_3D_1 = numpy.array(
+                            [objekt_bauteil.erhalte_position().x, objekt_bauteil.erhalte_position().z,
+                             objekt_bauteil.erhalte_position().y])
+                        temp_punkt_3D_2 = numpy.array(
+                            [element.erhalte_position().x, element.erhalte_position().z,
+                             element.erhalte_position().y])
+
+                        x_abstand_coll = numpy.linalg.norm(
+                            temp_punkt_3D_1 - temp_punkt_3D_2)
+                        if x_abstand_coll < 1:
+                            t_coll_counter += 1
+                            pass
+            return t_x_zahler,t_coll_counter
+
+        def ad(bereits_gedreht,i_winkel,t_winkel,winkel,a):
+            t_bereits_gedreht = bereits_gedreht
+            t_t_winkel = t_winkel
             if bereits_gedreht < winkel:
-                t_winkel += i_winkel
-                if t_winkel > winkel:
-                    t_winkel = t_winkel - i_winkel
-                    t_winkel = (winkel - t_winkel) + t_winkel
+                t_t_winkel += i_winkel
+                if t_t_winkel > winkel:
+                    t_t_winkel = t_t_winkel - i_winkel
+                    t_t_winkel = (winkel - t_t_winkel) + t_t_winkel
 
                 temp_objekt = grafischer_prototyp.GrafikObjekte.GrafikPosition()
                 temp_objekt.erzeuge_position(self.ausleger.pos.x + self.ausleger.axis.x,
                                              self.ausleger.pos.z + self.ausleger.axis.z,
                                              self.ausleger.pos.y + self.ausleger.axis.y - 0.5)
-                temp_punkt_3D = self.berechne_punkt_kreisgleichung_abhaengig_winkel(aktueller_winkel_ausleger_anfang + a*t_winkel,  None, temp_objekt)
-                self.ausleger.axis.x = temp_punkt_3D.erhalte_position().x-self.ausleger.pos.x
-                self.ausleger.axis.z = temp_punkt_3D.erhalte_position().z-self.ausleger.pos.z
+                temp_punkt_3D = self.berechne_punkt_kreisgleichung_abhaengig_winkel(aktueller_winkel_ausleger_anfang +
+                                                                                    a * t_t_winkel, None, temp_objekt)
+                self.ausleger.axis.x = temp_punkt_3D.erhalte_position().x - self.ausleger.pos.x
+                self.ausleger.axis.z = temp_punkt_3D.erhalte_position().z - self.ausleger.pos.z
 
                 temp_objekt = grafischer_prototyp.GrafikObjekte.GrafikPosition()
                 temp_objekt.erzeuge_position(self.laufkatze.pos.x, self.laufkatze.pos.z, self.laufkatze.pos.y)
-                temp_punkt_3D = self.berechne_punkt_kreisgleichung_abhaengig_winkel(aktueller_winkel_ausleger_anfang + a*t_winkel,  None, temp_objekt)
+                temp_punkt_3D = self.berechne_punkt_kreisgleichung_abhaengig_winkel(aktueller_winkel_ausleger_anfang +
+                                                                                    a * t_t_winkel, None, temp_objekt)
 
                 self.laufkatze.pos.x = temp_punkt_3D.erhalte_position().x
-                #self.laufkatze.pos.y = temp_punkt_3D.erhalte_position().y
                 self.laufkatze.pos.z = temp_punkt_3D.erhalte_position().z
                 self.greifarm.pos.x = temp_punkt_3D.erhalte_position().x
-                #self.greifarm.pos.y = temp_punkt_3D.erhalte_position().y -0.5
                 self.greifarm.pos.z = temp_punkt_3D.erhalte_position().z
                 self.verbindunsseil.pos.x = temp_punkt_3D.erhalte_position().x
                 self.verbindunsseil.pos.z = temp_punkt_3D.erhalte_position().z
                 if objekt_bauteil is not None:
                     objekt_bauteil.erhalte_position().x = temp_punkt_3D.erhalte_position().x
-                    #objekt_bauteil.erhalte_position().y = temp_punkt_3D.erhalte_position().y-0.5
                     objekt_bauteil.erhalte_position().z = temp_punkt_3D.erhalte_position().z
 
-                bereits_gedreht += i_winkel
+                t_bereits_gedreht += i_winkel
+            return t_bereits_gedreht, t_t_winkel
 
-                if x_zahler < x_abstand_zwischen_zwei_puntken:
-                    x_zahler += x_erhoehung
-                    b = 1
-                    temp_objekt = grafischer_prototyp.GrafikObjekte.GrafikPosition()
-                    temp_objekt.erzeuge_position(self.laufkatze.pos.x,
-                                                 self.laufkatze.pos.z,
-                                                 self.laufkatze.pos.y)
-                    temp_punkt_2D0 = numpy.array([objekt_pos.erhalte_position().x, objekt_pos.erhalte_position().z])
-                    temp_punkt_2D1 = numpy.array([self.laufkatze.pos.x, self.laufkatze.pos.z])
-                    temp_punkt_2D2 = numpy.array([self.turm.pos.x,self.turm.pos.z])
-                    x_abstand_1 = numpy.linalg.norm(temp_punkt_2D0 - temp_punkt_2D2)
-                    x_abstand_2 = numpy.linalg.norm(temp_punkt_2D1 - temp_punkt_2D2)
-                    if x_zahler > x_abstand_zwischen_zwei_puntken:
-                        x_erhoehung = x_abstand_1-x_abstand_2 #x_abstand_zwischen_zwei_puntken - x_zahler - x_erhoehung#
-                        if x_erhoehung < 0:
-                            x_erhoehung = -1*x_erhoehung
-                    if x_abstand_2 < x_abstand_1:
-                        temp_punkt_3D = self.berechne_punkt_kreisgleichung_abhaengig_winkel(aktueller_winkel_ausleger_anfang + a*t_winkel, x_erhoehung*b, temp_objekt)
-                    elif x_abstand_2 > x_abstand_1:
-                        temp_punkt_3D = self.berechne_punkt_kreisgleichung_abhaengig_winkel(aktueller_winkel_ausleger_anfang + a*t_winkel, -1*x_erhoehung*b,
-                                                                                            temp_objekt)
-                    self.laufkatze.pos.x = temp_punkt_3D.erhalte_position().x
-                    self.laufkatze.pos.z = temp_punkt_3D.erhalte_position().z
-                    self.greifarm.pos.x = temp_punkt_3D.erhalte_position().x
-                    self.greifarm.pos.z = temp_punkt_3D.erhalte_position().z
-                    self.verbindunsseil.pos.x = temp_punkt_3D.erhalte_position().x
-                    self.verbindunsseil.pos.z = temp_punkt_3D.erhalte_position().z
-                    #self.greifarm.pos.y = self.laufkatze.pos.y - 0.5
+        def ae(coll_counter):
+            if coll_counter > 0:
+                string = "bringe an Position(" + str(objekt_pos.erhalte_position().x) + ", " + str(
+                    objekt_pos.erhalte_position().z) + ", " + str(objekt_pos.erhalte_position().y) + ")"
+                self.collision_error.append(string)
 
+        # func
+        def ba(objekt_pos):
+            temp_punkt_2D = numpy.array([objekt_pos.erhalte_position().x, objekt_pos.erhalte_position().z])
+            temp_objekt = grafischer_prototyp.GrafikObjekte.GrafikPosition()
+            temp_objekt.erzeuge_position(self.laufkatze.pos.x, self.laufkatze.pos.z, self.laufkatze.pos.y)
+            temp_punkt_3D = self.berechne_punkt_kreisgleichung_abhaengig_winkel(winkel, None, temp_objekt)
+            temp_punkt_2D_nach_rotation = numpy.array([temp_punkt_3D.erhalte_position().x,
+                                                       temp_punkt_3D.erhalte_position().z])
+            x_abstand_zwischen_zwei_puntken = numpy.linalg.norm(temp_punkt_2D - temp_punkt_2D_nach_rotation)
+            x_erhoehung, i_winkel, x_erhoehung_hoehe = self.berechne_bewegunszeit_laufkatze_ausleger(winkel,
+                                                                            x_abstand_zwischen_zwei_puntken,objekt_pos)
+            return x_abstand_zwischen_zwei_puntken, x_erhoehung, i_winkel, x_erhoehung_hoehe
 
-                    if objekt_bauteil is not None:
-                        objekt_bauteil.erhalte_position().x = temp_punkt_3D.erhalte_position().x
-                        objekt_bauteil.erhalte_position().y = self.greifarm.pos.y#temp_punkt_3D.erhalte_position().y - 0.5
-                        objekt_bauteil.erhalte_position().z = temp_punkt_3D.erhalte_position().z
-                        for element in hindernisse:
-                            temp_punkt_3D_1 = numpy.array(
-                                [objekt_bauteil.erhalte_position().x, objekt_bauteil.erhalte_position().z,
-                                 objekt_bauteil.erhalte_position().y])
-                            temp_punkt_3D_2 = numpy.array(
-                                [element.erhalte_position().x, element.erhalte_position().z,
-                                 element.erhalte_position().y])
+        def bb(x_erhoehung, i_winkel, x_erhoehung_hoehe,factor):
+            tx_erhoehung = x_erhoehung / factor
+            ti_winkel = i_winkel / factor
+            tx_erhoehung_hoehe = x_erhoehung_hoehe / factor
+            return tx_erhoehung,ti_winkel,tx_erhoehung_hoehe
 
-                            x_abstand_coll = numpy.linalg.norm(
-                                temp_punkt_3D_1 - temp_punkt_3D_2)
-                            if x_abstand_coll < 1:
-                                coll_counter += 1
-                                # self.collision_error.append("collision")
-                                pass
+        def bc(objekt_pos):
+            if self.greifarm.pos.y < objekt_pos.erhalte_position().y:
+                hoehe = objekt_pos.erhalte_position().y - self.greifarm.pos.y
+            else:
+                hoehe = self.greifarm.pos.y - objekt_pos.erhalte_position().y
+            return hoehe
+
+        def bd(x_erhoehung,x_abstand_zwischen_zwei_puntken,i_winkel,winkel,x_erhoehung_hoehe,hoehe):
+            if x_erhoehung == 0.1:
+                self.time = self.time + x_abstand_zwischen_zwei_puntken
+            elif i_winkel == 1:
+                self.time = self.time + winkel / 10
+            elif x_erhoehung_hoehe == 0.1:
+                self.time = self.time + hoehe
+
+        bereits_gedreht = x_zahler = t_winkel = bereits_erhoeht = coll_counter =  0
+        x_abstand_zwischen_zwei_puntken, x_erhoehung, i_winkel, x_erhoehung_hoehe = ba(objekt_pos)
+        x_erhoehung, i_winkel, x_erhoehung_hoehe =bb(x_erhoehung, i_winkel, x_erhoehung_hoehe, 10)
+        # zusammenfassen + funktion
+        #x_erhoehung = x_erhoehung/10
+        #i_winkel = i_winkel/10
+        #x_erhoehung_hoehe = x_erhoehung_hoehe/10
+
+        # variable umbenennen
+        a = self.berechne_punkt_links_oder_rechts_gerade(objekt_pos ,aktueller_winkel_ausleger_anfang)
+        hoehe = bc(objekt_pos)
+        #if self.greifarm.pos.y < objekt_pos.erhalte_position().y:
+        #    hoehe = objekt_pos.erhalte_position().y - self.greifarm.pos.y
+        #else:
+        #    hoehe = self.greifarm.pos.y - objekt_pos.erhalte_position().y
+
+        # time func
+        #if x_erhoehung == 0.1:
+        #    self.time = self.time + x_abstand_zwischen_zwei_puntken
+        #elif i_winkel == 1:
+        #    self.time = self.time + winkel/10
+        #elif x_erhoehung_hoehe == 0.1:
+        #    self.time = self.time + hoehe
+
+        bd(x_erhoehung, x_abstand_zwischen_zwei_puntken, i_winkel, winkel, x_erhoehung_hoehe, hoehe)
+
+        while True:
+            rate(self.rate)
+            if winkel == 0:
+                while True:
+                    if x_zahler < x_abstand_zwischen_zwei_puntken:
+                    #    x_zahler += x_erhoehung
+                    #    b = 1
+                    #    temp_objekt = grafischer_prototyp.GrafikObjekte.GrafikPosition()
+                    #    temp_objekt.erzeuge_position(self.laufkatze.pos.x,
+                    #                                 self.laufkatze.pos.z,
+                    #                                 self.laufkatze.pos.y)
+                    #    temp_punkt_2D0 = numpy.array([objekt_pos.erhalte_position().x, objekt_pos.erhalte_position().z])
+                    #    temp_punkt_2D1 = numpy.array([self.laufkatze.pos.x, self.laufkatze.pos.z])
+                    #    temp_punkt_2D2 = numpy.array([self.turm.pos.x,self.turm.pos.z])
+                    #    x_abstand_1 = numpy.linalg.norm(temp_punkt_2D0 - temp_punkt_2D2)
+                    #    x_abstand_2 = numpy.linalg.norm(temp_punkt_2D1 - temp_punkt_2D2)
+                    #    if x_zahler > x_abstand_zwischen_zwei_puntken:
+                    #        x_erhoehung = x_abstand_1-x_abstand_2
+                    #        if x_erhoehung < 0:
+                    #            x_erhoehung = -1*x_erhoehung
+                    #    if x_abstand_2 < x_abstand_1:
+                    #        temp_punkt_3D = self.berechne_punkt_kreisgleichung_abhaengig_winkel(aktueller_winkel_ausleger_anfang + a*t_winkel, x_erhoehung*b, temp_objekt)
+                    #    elif x_abstand_2 > x_abstand_1:
+                    #        temp_punkt_3D = self.berechne_punkt_kreisgleichung_abhaengig_winkel(aktueller_winkel_ausleger_anfang + a*t_winkel, -1*x_erhoehung*b,
+                    #                                                                            temp_objekt)
+                    #    self.laufkatze.pos.x = temp_punkt_3D.erhalte_position().x
+                    #    self.laufkatze.pos.z = temp_punkt_3D.erhalte_position().z
+                    #    self.greifarm.pos.x = temp_punkt_3D.erhalte_position().x
+                    #    self.greifarm.pos.z = temp_punkt_3D.erhalte_position().z
+                    #    self.verbindunsseil.pos.x = temp_punkt_3D.erhalte_position().x
+                    #    self.verbindunsseil.pos.z = temp_punkt_3D.erhalte_position().z
+                    #    if objekt_bauteil is not None:
+                    #        objekt_bauteil.erhalte_position().x = temp_punkt_3D.erhalte_position().x
+                    #        objekt_bauteil.erhalte_position().y = self.greifarm.pos.y
+                    #        objekt_bauteil.erhalte_position().z = temp_punkt_3D.erhalte_position().z
+                        x_zahler,coll_counter = ac(x_zahler, x_abstand_zwischen_zwei_puntken, x_erhoehung, coll_counter)
+                        bereits_erhoeht = ab(bereits_erhoeht,x_erhoehung_hoehe,hoehe)
+
+                        #if bereits_erhoeht < hoehe:
+                        #    bereits_erhoeht = bereits_erhoeht + x_erhoehung_hoehe
+                        #    if bereits_erhoeht > hoehe:
+                        #        x_erhoehung_hoehe = hoehe - (bereits_erhoeht - x_erhoehung_hoehe)
+
+                        #    if objekt_pos.erhalte_position().y < self.greifarm.pos.y:
+                        #        self.greifarm.pos.y = self.greifarm.pos.y - x_erhoehung_hoehe
+                        #        self.verbindunsseil.pos = self.greifarm.pos
+                        #        self.verbindunsseil.pos.y = self.verbindunsseil.pos.y + 0.5
+                        #        self.verbindunsseil.length = self.verbindunsseil.length + x_erhoehung_hoehe
+                        #    elif self.greifarm.pos.y < objekt_pos.erhalte_position().y:
+                        #        self.greifarm.pos.y = self.greifarm.pos.y + x_erhoehung_hoehe
+                        #        self.verbindunsseil.pos = self.greifarm.pos
+                        #        self.verbindunsseil.pos.y = self.verbindunsseil.pos.y + 0.5
+                        #        self.verbindunsseil.length = self.verbindunsseil.length - x_erhoehung_hoehe
+
+                    else:
+                        #if coll_counter > 0:
+                        #    string = "bringe an Position(" + str(objekt_pos.erhalte_position().x) + ", " + str(
+                        #        objekt_pos.erhalte_position().z) + ", " + str(objekt_pos.erhalte_position().y) + ")"
+                        #    self.collision_error.append(string)
+                        ae(coll_counter)
+                        break
+                break
+
+            #else:
+            #    break
+
+            if bereits_gedreht < winkel:
+                #t_winkel += i_winkel
+                #if t_winkel > winkel:
+                #    t_winkel = t_winkel - i_winkel
+                #    t_winkel = (winkel - t_winkel) + t_winkel
+
+                #temp_objekt = grafischer_prototyp.GrafikObjekte.GrafikPosition()
+                #temp_objekt.erzeuge_position(self.ausleger.pos.x + self.ausleger.axis.x,
+                #                             self.ausleger.pos.z + self.ausleger.axis.z,
+                #                             self.ausleger.pos.y + self.ausleger.axis.y - 0.5)
+                #temp_punkt_3D = self.berechne_punkt_kreisgleichung_abhaengig_winkel(aktueller_winkel_ausleger_anfang +
+                #                                                                    a*t_winkel,  None, temp_objekt)
+                #self.ausleger.axis.x = temp_punkt_3D.erhalte_position().x-self.ausleger.pos.x
+                #self.ausleger.axis.z = temp_punkt_3D.erhalte_position().z-self.ausleger.pos.z
+
+                #temp_objekt = grafischer_prototyp.GrafikObjekte.GrafikPosition()
+                #temp_objekt.erzeuge_position(self.laufkatze.pos.x, self.laufkatze.pos.z, self.laufkatze.pos.y)
+                #temp_punkt_3D = self.berechne_punkt_kreisgleichung_abhaengig_winkel(aktueller_winkel_ausleger_anfang +
+                #                                                                    a*t_winkel,  None, temp_objekt)
+
+                #self.laufkatze.pos.x = temp_punkt_3D.erhalte_position().x
+                #self.laufkatze.pos.z = temp_punkt_3D.erhalte_position().z
+                #self.greifarm.pos.x = temp_punkt_3D.erhalte_position().x
+                #self.greifarm.pos.z = temp_punkt_3D.erhalte_position().z
+                #self.verbindunsseil.pos.x = temp_punkt_3D.erhalte_position().x
+                #self.verbindunsseil.pos.z = temp_punkt_3D.erhalte_position().z
+                #if objekt_bauteil is not None:
+                #    objekt_bauteil.erhalte_position().x = temp_punkt_3D.erhalte_position().x
+                #    objekt_bauteil.erhalte_position().z = temp_punkt_3D.erhalte_position().z
+
+                #bereits_gedreht += i_winkel
+
+                bereits_gedreht, t_winkel=ad(bereits_gedreht, i_winkel, t_winkel, winkel, a)
+
+                #if x_zahler < x_abstand_zwischen_zwei_puntken:
+                #    x_zahler += x_erhoehung
+                #    b = 1
+                #    temp_objekt = grafischer_prototyp.GrafikObjekte.GrafikPosition()
+                #    temp_objekt.erzeuge_position(self.laufkatze.pos.x,
+                #                                 self.laufkatze.pos.z,
+                #                                 self.laufkatze.pos.y)
+                #    temp_punkt_2D0 = numpy.array([objekt_pos.erhalte_position().x, objekt_pos.erhalte_position().z])
+                #    temp_punkt_2D1 = numpy.array([self.laufkatze.pos.x, self.laufkatze.pos.z])
+                #    temp_punkt_2D2 = numpy.array([self.turm.pos.x,self.turm.pos.z])
+                #    x_abstand_1 = numpy.linalg.norm(temp_punkt_2D0 - temp_punkt_2D2)
+                #    x_abstand_2 = numpy.linalg.norm(temp_punkt_2D1 - temp_punkt_2D2)
+                #    if x_zahler > x_abstand_zwischen_zwei_puntken:
+                #        x_erhoehung = x_abstand_1-x_abstand_2
+                #        if x_erhoehung < 0:
+                #            x_erhoehung = -1*x_erhoehung
+                #    if x_abstand_2 < x_abstand_1:
+                #        temp_punkt_3D = self.berechne_punkt_kreisgleichung_abhaengig_winkel(aktueller_winkel_ausleger_anfang + a*t_winkel, x_erhoehung*b, temp_objekt)
+                #    elif x_abstand_2 > x_abstand_1:
+                #        temp_punkt_3D = self.berechne_punkt_kreisgleichung_abhaengig_winkel(aktueller_winkel_ausleger_anfang + a*t_winkel, -1*x_erhoehung*b,
+                #                                                                            temp_objekt)
+                #    self.laufkatze.pos.x = temp_punkt_3D.erhalte_position().x
+                #    self.laufkatze.pos.z = temp_punkt_3D.erhalte_position().z
+                #    self.greifarm.pos.x = temp_punkt_3D.erhalte_position().x
+                #    self.greifarm.pos.z = temp_punkt_3D.erhalte_position().z
+                #    self.verbindunsseil.pos.x = temp_punkt_3D.erhalte_position().x
+                #    self.verbindunsseil.pos.z = temp_punkt_3D.erhalte_position().z
+
+                #    if objekt_bauteil is not None:
+                #        objekt_bauteil.erhalte_position().x = temp_punkt_3D.erhalte_position().x
+                #        objekt_bauteil.erhalte_position().y = self.greifarm.pos.y
+                #        objekt_bauteil.erhalte_position().z = temp_punkt_3D.erhalte_position().z
+                #        for element in hindernisse:
+                #            temp_punkt_3D_1 = numpy.array(
+                #                [objekt_bauteil.erhalte_position().x, objekt_bauteil.erhalte_position().z,
+                #                 objekt_bauteil.erhalte_position().y])
+                #            temp_punkt_3D_2 = numpy.array(
+                #                [element.erhalte_position().x, element.erhalte_position().z,
+                #                 element.erhalte_position().y])
+
+                #            x_abstand_coll = numpy.linalg.norm(
+                #                temp_punkt_3D_1 - temp_punkt_3D_2)
+                #            if x_abstand_coll < 1:
+                #                coll_counter += 1
+                #                pass
+
+                x_zahler, coll_counter = ac(x_zahler, x_abstand_zwischen_zwei_puntken, x_erhoehung, coll_counter)
+                bereits_erhoeht = ab(bereits_erhoeht,x_erhoehung_hoehe,hoehe)
+                #if bereits_erhoeht < hoehe:
+                #    bereits_erhoeht = bereits_erhoeht + x_erhoehung_hoehe
+                #    if bereits_erhoeht > hoehe:
+                #        x_erhoehung_hoehe = hoehe - (bereits_erhoeht - x_erhoehung_hoehe)
+
+                #    if objekt_pos.erhalte_position().y < self.greifarm.pos.y:
+                #        self.greifarm.pos.y = self.greifarm.pos.y - x_erhoehung_hoehe
+                #        self.verbindunsseil.pos = self.greifarm.pos
+                #        self.verbindunsseil.pos.y = self.verbindunsseil.pos.y + 0.5
+                #        self.verbindunsseil.length = self.verbindunsseil.length + x_erhoehung_hoehe
+                #    elif self.greifarm.pos.y < objekt_pos.erhalte_position().y:
+                #        self.greifarm.pos.y = self.greifarm.pos.y + x_erhoehung_hoehe
+                #        self.verbindunsseil.pos = self.greifarm.pos
+                #        self.verbindunsseil.pos.y = self.verbindunsseil.pos.y + 0.5
+                #        self.verbindunsseil.length = self.verbindunsseil.length - x_erhoehung_hoehe
+
 
             else:
-                if coll_counter > 0:
-                    self.collision_error.append("collision")
+                #if coll_counter > 0:
+                #    string = "bringe an Position(" + str(objekt_pos.erhalte_position().x) + ", " + str(
+                #        objekt_pos.erhalte_position().z) + ", " + str(objekt_pos.erhalte_position().y) + ")"
+                #    self.collision_error.append(string)
+                ae(coll_counter)
                 break
         self.greifarm.pos.y = round(self.greifarm.pos.y,0)
-        print(self.greifarm.pos)
-        #return "unlock" #a*t_winkel + aktueller_winkel_ausleger_anfang
         return a * t_winkel + aktueller_winkel_ausleger_anfang

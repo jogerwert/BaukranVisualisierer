@@ -358,6 +358,8 @@ def test_kran7():
     print(beispiel_bauteile[1].erhalte_position())
     print(beispiel_bauteile[2].erhalte_position())
     #print(beispiel_bauteile[3].erhalte_position())
+    while True:
+        pass
 
 def test_kran8():
     beispiel_baufeld = GrafikBaufeld()
@@ -373,13 +375,13 @@ def test_kran8():
     pos.erzeuge_position(2, 2, 0)
     beispiel_kran.animationsgeschwindigkeit(1)
     winkel = beispiel_kran.berechne_drehwinkel_objekt(pos)
-    t_winkel = beispiel_kran.test_func(winkel, 0, pos, None)
+    t_winkel = beispiel_kran.test_func(winkel, 0, pos, None, None)
     #beispiel_kran.veraendere_greifarm_hoehe("senke", 4, None)
     beispiel_kran.veraendere_greifarm_hoehe("erhoehe", 2, beispiel_bauteile[0])
     pos = GrafikPosition()
     pos.erzeuge_position(4, 4, 2)
     winkel = beispiel_kran.berechne_drehwinkel_objekt(pos)
-    t_winkel = beispiel_kran.test_func(winkel, t_winkel, pos, beispiel_bauteile[0])
+    t_winkel = beispiel_kran.test_func(winkel, t_winkel, pos, beispiel_bauteile[0], None)
     beispiel_kran.veraendere_greifarm_hoehe("senke", 2, beispiel_bauteile[0])
     while True:
         pass
@@ -392,4 +394,6 @@ scene.height = 1080
 #test_bauteil()
 #test_hindernis()
 #sleep(3)
-test_kran8()
+test_kran7()
+while True:
+    pass
