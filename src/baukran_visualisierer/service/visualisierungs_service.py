@@ -3,7 +3,7 @@ import grafischer_prototyp.GrafikObjekte
 import grafischer_prototyp.GrafikKran
 from baukran_visualisierer.model.baustelle import Baustelle
 from vpython import *
-import ctypes  # An included library with Python install.
+import ctypes
 from baukran_visualisierer.datei_management import file_picker
 from baukran_visualisierer.service import parser_service #,visualisierungs_service
 
@@ -40,6 +40,9 @@ def setze_visualisierungs_funktionen(baustelle: Baustelle) -> None:
     baustelle.kran.visualisiere_hebe_um = visualisiere_hebe_um
 
 def visualisiere_baustelle(baustelle):
+    """
+        Notes: Erzeugt die Elemente der Baustelle in einem Browser
+    """
     global_baustelle.speichere_Baustelle(baustelle)
     erzeuge_menu_elemente()
     einstellen_Bildwerte()
@@ -62,6 +65,10 @@ def visualisiere_baustelle(baustelle):
         pass
 
 def erzeuge_menu_elemente():
+    """
+        Notes: Erzeugt die Kontrollelemente (Button,Slider) und weist diesen Funktionen zu.
+    """
+
     def Mbox(title, text):
         MB_SYSTEMMODAL = 0x00001000
         return ctypes.windll.user32.MessageBoxW(0, text, title, MB_SYSTEMMODAL)
@@ -152,6 +159,10 @@ def erzeuge_menu_elemente():
     erzeuge_elemente()
 
 def visualisiere_bringe_an(winkel_vorher, winkel_nachher, haken_x, haken_y, haken_z, bauteil_name):
+    """
+        Notes: Die Funktion ruft eine Funktion einer anderen Klasse auf, welche Ausleger, Greifarm, Laufkatze synchron
+        bewegt
+    """
     pos = grafischer_prototyp.GrafikObjekte.GrafikPosition()
     pos.erzeuge_position(haken_x, haken_y, haken_z)
     if winkel_nachher - winkel_vorher < 0:
@@ -165,7 +176,7 @@ def visualisiere_bringe_an(winkel_vorher, winkel_nachher, haken_x, haken_y, hake
             if bauteil.name == bauteil_name:
                 Objekt = bauteil
 
-    global_kran.test_func(winkel, winkel_vorher, pos, Objekt, hindernis_liste)
+    global_kran.bringe_an(winkel, winkel_vorher, pos, Objekt, hindernis_liste)
 
 def visualisiere_senke_um(hoehe, bauteil_name):
     Objekt = None
